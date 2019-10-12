@@ -1,2790 +1,2255 @@
-{
- "cells": [
-  {
-   "cell_type": "code",
-   "execution_count": 1,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "import numpy as np\n",
-    "import pandas as pd\n",
-    "import seaborn as sns\n"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 2,
-   "metadata": {},
-   "outputs": [
-    {
-     "data": {
-      "text/html": [
-       "<div>\n",
-       "<style scoped>\n",
-       "    .dataframe tbody tr th:only-of-type {\n",
-       "        vertical-align: middle;\n",
-       "    }\n",
-       "\n",
-       "    .dataframe tbody tr th {\n",
-       "        vertical-align: top;\n",
-       "    }\n",
-       "\n",
-       "    .dataframe thead th {\n",
-       "        text-align: right;\n",
-       "    }\n",
-       "</style>\n",
-       "<table border=\"1\" class=\"dataframe\">\n",
-       "  <thead>\n",
-       "    <tr style=\"text-align: right;\">\n",
-       "      <th></th>\n",
-       "      <th>App</th>\n",
-       "      <th>Category</th>\n",
-       "      <th>Rating</th>\n",
-       "      <th>Reviews</th>\n",
-       "      <th>Size</th>\n",
-       "      <th>Installs</th>\n",
-       "      <th>Type</th>\n",
-       "      <th>Price</th>\n",
-       "      <th>Content Rating</th>\n",
-       "      <th>Genres</th>\n",
-       "      <th>Last Updated</th>\n",
-       "      <th>Current Ver</th>\n",
-       "      <th>Android Ver</th>\n",
-       "    </tr>\n",
-       "  </thead>\n",
-       "  <tbody>\n",
-       "    <tr>\n",
-       "      <th>0</th>\n",
-       "      <td>Photo Editor &amp; Candy Camera &amp; Grid &amp; ScrapBook</td>\n",
-       "      <td>ART_AND_DESIGN</td>\n",
-       "      <td>4.1</td>\n",
-       "      <td>159</td>\n",
-       "      <td>19M</td>\n",
-       "      <td>10,000+</td>\n",
-       "      <td>Free</td>\n",
-       "      <td>0</td>\n",
-       "      <td>Everyone</td>\n",
-       "      <td>Art &amp; Design</td>\n",
-       "      <td>January 7, 2018</td>\n",
-       "      <td>1.0.0</td>\n",
-       "      <td>4.0.3 and up</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>1</th>\n",
-       "      <td>Coloring book moana</td>\n",
-       "      <td>ART_AND_DESIGN</td>\n",
-       "      <td>3.9</td>\n",
-       "      <td>967</td>\n",
-       "      <td>14M</td>\n",
-       "      <td>500,000+</td>\n",
-       "      <td>Free</td>\n",
-       "      <td>0</td>\n",
-       "      <td>Everyone</td>\n",
-       "      <td>Art &amp; Design;Pretend Play</td>\n",
-       "      <td>January 15, 2018</td>\n",
-       "      <td>2.0.0</td>\n",
-       "      <td>4.0.3 and up</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>2</th>\n",
-       "      <td>U Launcher Lite – FREE Live Cool Themes, Hide ...</td>\n",
-       "      <td>ART_AND_DESIGN</td>\n",
-       "      <td>4.7</td>\n",
-       "      <td>87510</td>\n",
-       "      <td>8.7M</td>\n",
-       "      <td>5,000,000+</td>\n",
-       "      <td>Free</td>\n",
-       "      <td>0</td>\n",
-       "      <td>Everyone</td>\n",
-       "      <td>Art &amp; Design</td>\n",
-       "      <td>August 1, 2018</td>\n",
-       "      <td>1.2.4</td>\n",
-       "      <td>4.0.3 and up</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>3</th>\n",
-       "      <td>Sketch - Draw &amp; Paint</td>\n",
-       "      <td>ART_AND_DESIGN</td>\n",
-       "      <td>4.5</td>\n",
-       "      <td>215644</td>\n",
-       "      <td>25M</td>\n",
-       "      <td>50,000,000+</td>\n",
-       "      <td>Free</td>\n",
-       "      <td>0</td>\n",
-       "      <td>Teen</td>\n",
-       "      <td>Art &amp; Design</td>\n",
-       "      <td>June 8, 2018</td>\n",
-       "      <td>Varies with device</td>\n",
-       "      <td>4.2 and up</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>4</th>\n",
-       "      <td>Pixel Draw - Number Art Coloring Book</td>\n",
-       "      <td>ART_AND_DESIGN</td>\n",
-       "      <td>4.3</td>\n",
-       "      <td>967</td>\n",
-       "      <td>2.8M</td>\n",
-       "      <td>100,000+</td>\n",
-       "      <td>Free</td>\n",
-       "      <td>0</td>\n",
-       "      <td>Everyone</td>\n",
-       "      <td>Art &amp; Design;Creativity</td>\n",
-       "      <td>June 20, 2018</td>\n",
-       "      <td>1.1</td>\n",
-       "      <td>4.4 and up</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>5</th>\n",
-       "      <td>Paper flowers instructions</td>\n",
-       "      <td>ART_AND_DESIGN</td>\n",
-       "      <td>4.4</td>\n",
-       "      <td>167</td>\n",
-       "      <td>5.6M</td>\n",
-       "      <td>50,000+</td>\n",
-       "      <td>Free</td>\n",
-       "      <td>0</td>\n",
-       "      <td>Everyone</td>\n",
-       "      <td>Art &amp; Design</td>\n",
-       "      <td>March 26, 2017</td>\n",
-       "      <td>1.0</td>\n",
-       "      <td>2.3 and up</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>6</th>\n",
-       "      <td>Smoke Effect Photo Maker - Smoke Editor</td>\n",
-       "      <td>ART_AND_DESIGN</td>\n",
-       "      <td>3.8</td>\n",
-       "      <td>178</td>\n",
-       "      <td>19M</td>\n",
-       "      <td>50,000+</td>\n",
-       "      <td>Free</td>\n",
-       "      <td>0</td>\n",
-       "      <td>Everyone</td>\n",
-       "      <td>Art &amp; Design</td>\n",
-       "      <td>April 26, 2018</td>\n",
-       "      <td>1.1</td>\n",
-       "      <td>4.0.3 and up</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>7</th>\n",
-       "      <td>Infinite Painter</td>\n",
-       "      <td>ART_AND_DESIGN</td>\n",
-       "      <td>4.1</td>\n",
-       "      <td>36815</td>\n",
-       "      <td>29M</td>\n",
-       "      <td>1,000,000+</td>\n",
-       "      <td>Free</td>\n",
-       "      <td>0</td>\n",
-       "      <td>Everyone</td>\n",
-       "      <td>Art &amp; Design</td>\n",
-       "      <td>June 14, 2018</td>\n",
-       "      <td>6.1.61.1</td>\n",
-       "      <td>4.2 and up</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>8</th>\n",
-       "      <td>Garden Coloring Book</td>\n",
-       "      <td>ART_AND_DESIGN</td>\n",
-       "      <td>4.4</td>\n",
-       "      <td>13791</td>\n",
-       "      <td>33M</td>\n",
-       "      <td>1,000,000+</td>\n",
-       "      <td>Free</td>\n",
-       "      <td>0</td>\n",
-       "      <td>Everyone</td>\n",
-       "      <td>Art &amp; Design</td>\n",
-       "      <td>September 20, 2017</td>\n",
-       "      <td>2.9.2</td>\n",
-       "      <td>3.0 and up</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>9</th>\n",
-       "      <td>Kids Paint Free - Drawing Fun</td>\n",
-       "      <td>ART_AND_DESIGN</td>\n",
-       "      <td>4.7</td>\n",
-       "      <td>121</td>\n",
-       "      <td>3.1M</td>\n",
-       "      <td>10,000+</td>\n",
-       "      <td>Free</td>\n",
-       "      <td>0</td>\n",
-       "      <td>Everyone</td>\n",
-       "      <td>Art &amp; Design;Creativity</td>\n",
-       "      <td>July 3, 2018</td>\n",
-       "      <td>2.8</td>\n",
-       "      <td>4.0.3 and up</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>10</th>\n",
-       "      <td>Text on Photo - Fonteee</td>\n",
-       "      <td>ART_AND_DESIGN</td>\n",
-       "      <td>4.4</td>\n",
-       "      <td>13880</td>\n",
-       "      <td>28M</td>\n",
-       "      <td>1,000,000+</td>\n",
-       "      <td>Free</td>\n",
-       "      <td>0</td>\n",
-       "      <td>Everyone</td>\n",
-       "      <td>Art &amp; Design</td>\n",
-       "      <td>October 27, 2017</td>\n",
-       "      <td>1.0.4</td>\n",
-       "      <td>4.1 and up</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>11</th>\n",
-       "      <td>Name Art Photo Editor - Focus n Filters</td>\n",
-       "      <td>ART_AND_DESIGN</td>\n",
-       "      <td>4.4</td>\n",
-       "      <td>8788</td>\n",
-       "      <td>12M</td>\n",
-       "      <td>1,000,000+</td>\n",
-       "      <td>Free</td>\n",
-       "      <td>0</td>\n",
-       "      <td>Everyone</td>\n",
-       "      <td>Art &amp; Design</td>\n",
-       "      <td>July 31, 2018</td>\n",
-       "      <td>1.0.15</td>\n",
-       "      <td>4.0 and up</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>12</th>\n",
-       "      <td>Tattoo Name On My Photo Editor</td>\n",
-       "      <td>ART_AND_DESIGN</td>\n",
-       "      <td>4.2</td>\n",
-       "      <td>44829</td>\n",
-       "      <td>20M</td>\n",
-       "      <td>10,000,000+</td>\n",
-       "      <td>Free</td>\n",
-       "      <td>0</td>\n",
-       "      <td>Teen</td>\n",
-       "      <td>Art &amp; Design</td>\n",
-       "      <td>April 2, 2018</td>\n",
-       "      <td>3.8</td>\n",
-       "      <td>4.1 and up</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>13</th>\n",
-       "      <td>Mandala Coloring Book</td>\n",
-       "      <td>ART_AND_DESIGN</td>\n",
-       "      <td>4.6</td>\n",
-       "      <td>4326</td>\n",
-       "      <td>21M</td>\n",
-       "      <td>100,000+</td>\n",
-       "      <td>Free</td>\n",
-       "      <td>0</td>\n",
-       "      <td>Everyone</td>\n",
-       "      <td>Art &amp; Design</td>\n",
-       "      <td>June 26, 2018</td>\n",
-       "      <td>1.0.4</td>\n",
-       "      <td>4.4 and up</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>14</th>\n",
-       "      <td>3D Color Pixel by Number - Sandbox Art Coloring</td>\n",
-       "      <td>ART_AND_DESIGN</td>\n",
-       "      <td>4.4</td>\n",
-       "      <td>1518</td>\n",
-       "      <td>37M</td>\n",
-       "      <td>100,000+</td>\n",
-       "      <td>Free</td>\n",
-       "      <td>0</td>\n",
-       "      <td>Everyone</td>\n",
-       "      <td>Art &amp; Design</td>\n",
-       "      <td>August 3, 2018</td>\n",
-       "      <td>1.2.3</td>\n",
-       "      <td>2.3 and up</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>15</th>\n",
-       "      <td>Learn To Draw Kawaii Characters</td>\n",
-       "      <td>ART_AND_DESIGN</td>\n",
-       "      <td>3.2</td>\n",
-       "      <td>55</td>\n",
-       "      <td>2.7M</td>\n",
-       "      <td>5,000+</td>\n",
-       "      <td>Free</td>\n",
-       "      <td>0</td>\n",
-       "      <td>Everyone</td>\n",
-       "      <td>Art &amp; Design</td>\n",
-       "      <td>June 6, 2018</td>\n",
-       "      <td>NaN</td>\n",
-       "      <td>4.2 and up</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>16</th>\n",
-       "      <td>Photo Designer - Write your name with shapes</td>\n",
-       "      <td>ART_AND_DESIGN</td>\n",
-       "      <td>4.7</td>\n",
-       "      <td>3632</td>\n",
-       "      <td>5.5M</td>\n",
-       "      <td>500,000+</td>\n",
-       "      <td>Free</td>\n",
-       "      <td>0</td>\n",
-       "      <td>Everyone</td>\n",
-       "      <td>Art &amp; Design</td>\n",
-       "      <td>July 31, 2018</td>\n",
-       "      <td>3.1</td>\n",
-       "      <td>4.1 and up</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>17</th>\n",
-       "      <td>350 Diy Room Decor Ideas</td>\n",
-       "      <td>ART_AND_DESIGN</td>\n",
-       "      <td>4.5</td>\n",
-       "      <td>27</td>\n",
-       "      <td>17M</td>\n",
-       "      <td>10,000+</td>\n",
-       "      <td>Free</td>\n",
-       "      <td>0</td>\n",
-       "      <td>Everyone</td>\n",
-       "      <td>Art &amp; Design</td>\n",
-       "      <td>November 7, 2017</td>\n",
-       "      <td>1.0</td>\n",
-       "      <td>2.3 and up</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>18</th>\n",
-       "      <td>FlipaClip - Cartoon animation</td>\n",
-       "      <td>ART_AND_DESIGN</td>\n",
-       "      <td>4.3</td>\n",
-       "      <td>194216</td>\n",
-       "      <td>39M</td>\n",
-       "      <td>5,000,000+</td>\n",
-       "      <td>Free</td>\n",
-       "      <td>0</td>\n",
-       "      <td>Everyone</td>\n",
-       "      <td>Art &amp; Design</td>\n",
-       "      <td>August 3, 2018</td>\n",
-       "      <td>2.2.5</td>\n",
-       "      <td>4.0.3 and up</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>19</th>\n",
-       "      <td>ibis Paint X</td>\n",
-       "      <td>ART_AND_DESIGN</td>\n",
-       "      <td>4.6</td>\n",
-       "      <td>224399</td>\n",
-       "      <td>31M</td>\n",
-       "      <td>10,000,000+</td>\n",
-       "      <td>Free</td>\n",
-       "      <td>0</td>\n",
-       "      <td>Everyone</td>\n",
-       "      <td>Art &amp; Design</td>\n",
-       "      <td>July 30, 2018</td>\n",
-       "      <td>5.5.4</td>\n",
-       "      <td>4.1 and up</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>20</th>\n",
-       "      <td>Logo Maker - Small Business</td>\n",
-       "      <td>ART_AND_DESIGN</td>\n",
-       "      <td>4.0</td>\n",
-       "      <td>450</td>\n",
-       "      <td>14M</td>\n",
-       "      <td>100,000+</td>\n",
-       "      <td>Free</td>\n",
-       "      <td>0</td>\n",
-       "      <td>Everyone</td>\n",
-       "      <td>Art &amp; Design</td>\n",
-       "      <td>April 20, 2018</td>\n",
-       "      <td>4.0</td>\n",
-       "      <td>4.1 and up</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>21</th>\n",
-       "      <td>Boys Photo Editor - Six Pack &amp; Men's Suit</td>\n",
-       "      <td>ART_AND_DESIGN</td>\n",
-       "      <td>4.1</td>\n",
-       "      <td>654</td>\n",
-       "      <td>12M</td>\n",
-       "      <td>100,000+</td>\n",
-       "      <td>Free</td>\n",
-       "      <td>0</td>\n",
-       "      <td>Everyone</td>\n",
-       "      <td>Art &amp; Design</td>\n",
-       "      <td>March 20, 2018</td>\n",
-       "      <td>1.1</td>\n",
-       "      <td>4.0.3 and up</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>22</th>\n",
-       "      <td>Superheroes Wallpapers | 4K Backgrounds</td>\n",
-       "      <td>ART_AND_DESIGN</td>\n",
-       "      <td>4.7</td>\n",
-       "      <td>7699</td>\n",
-       "      <td>4.2M</td>\n",
-       "      <td>500,000+</td>\n",
-       "      <td>Free</td>\n",
-       "      <td>0</td>\n",
-       "      <td>Everyone 10+</td>\n",
-       "      <td>Art &amp; Design</td>\n",
-       "      <td>July 12, 2018</td>\n",
-       "      <td>2.2.6.2</td>\n",
-       "      <td>4.0.3 and up</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>23</th>\n",
-       "      <td>Mcqueen Coloring pages</td>\n",
-       "      <td>ART_AND_DESIGN</td>\n",
-       "      <td>NaN</td>\n",
-       "      <td>61</td>\n",
-       "      <td>7.0M</td>\n",
-       "      <td>100,000+</td>\n",
-       "      <td>Free</td>\n",
-       "      <td>0</td>\n",
-       "      <td>Everyone</td>\n",
-       "      <td>Art &amp; Design;Action &amp; Adventure</td>\n",
-       "      <td>March 7, 2018</td>\n",
-       "      <td>1.0.0</td>\n",
-       "      <td>4.1 and up</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>24</th>\n",
-       "      <td>HD Mickey Minnie Wallpapers</td>\n",
-       "      <td>ART_AND_DESIGN</td>\n",
-       "      <td>4.7</td>\n",
-       "      <td>118</td>\n",
-       "      <td>23M</td>\n",
-       "      <td>50,000+</td>\n",
-       "      <td>Free</td>\n",
-       "      <td>0</td>\n",
-       "      <td>Everyone</td>\n",
-       "      <td>Art &amp; Design</td>\n",
-       "      <td>July 7, 2018</td>\n",
-       "      <td>1.1.3</td>\n",
-       "      <td>4.1 and up</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>25</th>\n",
-       "      <td>Harley Quinn wallpapers HD</td>\n",
-       "      <td>ART_AND_DESIGN</td>\n",
-       "      <td>4.8</td>\n",
-       "      <td>192</td>\n",
-       "      <td>6.0M</td>\n",
-       "      <td>10,000+</td>\n",
-       "      <td>Free</td>\n",
-       "      <td>0</td>\n",
-       "      <td>Everyone</td>\n",
-       "      <td>Art &amp; Design</td>\n",
-       "      <td>April 25, 2018</td>\n",
-       "      <td>1.5</td>\n",
-       "      <td>3.0 and up</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>26</th>\n",
-       "      <td>Colorfit - Drawing &amp; Coloring</td>\n",
-       "      <td>ART_AND_DESIGN</td>\n",
-       "      <td>4.7</td>\n",
-       "      <td>20260</td>\n",
-       "      <td>25M</td>\n",
-       "      <td>500,000+</td>\n",
-       "      <td>Free</td>\n",
-       "      <td>0</td>\n",
-       "      <td>Everyone</td>\n",
-       "      <td>Art &amp; Design;Creativity</td>\n",
-       "      <td>October 11, 2017</td>\n",
-       "      <td>1.0.8</td>\n",
-       "      <td>4.0.3 and up</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>27</th>\n",
-       "      <td>Animated Photo Editor</td>\n",
-       "      <td>ART_AND_DESIGN</td>\n",
-       "      <td>4.1</td>\n",
-       "      <td>203</td>\n",
-       "      <td>6.1M</td>\n",
-       "      <td>100,000+</td>\n",
-       "      <td>Free</td>\n",
-       "      <td>0</td>\n",
-       "      <td>Everyone</td>\n",
-       "      <td>Art &amp; Design</td>\n",
-       "      <td>March 21, 2018</td>\n",
-       "      <td>1.03</td>\n",
-       "      <td>4.0.3 and up</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>28</th>\n",
-       "      <td>Pencil Sketch Drawing</td>\n",
-       "      <td>ART_AND_DESIGN</td>\n",
-       "      <td>3.9</td>\n",
-       "      <td>136</td>\n",
-       "      <td>4.6M</td>\n",
-       "      <td>10,000+</td>\n",
-       "      <td>Free</td>\n",
-       "      <td>0</td>\n",
-       "      <td>Everyone</td>\n",
-       "      <td>Art &amp; Design</td>\n",
-       "      <td>July 12, 2018</td>\n",
-       "      <td>6.0</td>\n",
-       "      <td>2.3 and up</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>29</th>\n",
-       "      <td>Easy Realistic Drawing Tutorial</td>\n",
-       "      <td>ART_AND_DESIGN</td>\n",
-       "      <td>4.1</td>\n",
-       "      <td>223</td>\n",
-       "      <td>4.2M</td>\n",
-       "      <td>100,000+</td>\n",
-       "      <td>Free</td>\n",
-       "      <td>0</td>\n",
-       "      <td>Everyone</td>\n",
-       "      <td>Art &amp; Design</td>\n",
-       "      <td>August 22, 2017</td>\n",
-       "      <td>1.0</td>\n",
-       "      <td>2.3 and up</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>...</th>\n",
-       "      <td>...</td>\n",
-       "      <td>...</td>\n",
-       "      <td>...</td>\n",
-       "      <td>...</td>\n",
-       "      <td>...</td>\n",
-       "      <td>...</td>\n",
-       "      <td>...</td>\n",
-       "      <td>...</td>\n",
-       "      <td>...</td>\n",
-       "      <td>...</td>\n",
-       "      <td>...</td>\n",
-       "      <td>...</td>\n",
-       "      <td>...</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>10811</th>\n",
-       "      <td>FR Plus 1.6</td>\n",
-       "      <td>AUTO_AND_VEHICLES</td>\n",
-       "      <td>NaN</td>\n",
-       "      <td>4</td>\n",
-       "      <td>3.9M</td>\n",
-       "      <td>100+</td>\n",
-       "      <td>Free</td>\n",
-       "      <td>0</td>\n",
-       "      <td>Everyone</td>\n",
-       "      <td>Auto &amp; Vehicles</td>\n",
-       "      <td>July 24, 2018</td>\n",
-       "      <td>1.3.6</td>\n",
-       "      <td>4.4W and up</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>10812</th>\n",
-       "      <td>Fr Agnel Pune</td>\n",
-       "      <td>FAMILY</td>\n",
-       "      <td>4.1</td>\n",
-       "      <td>80</td>\n",
-       "      <td>13M</td>\n",
-       "      <td>1,000+</td>\n",
-       "      <td>Free</td>\n",
-       "      <td>0</td>\n",
-       "      <td>Everyone</td>\n",
-       "      <td>Education</td>\n",
-       "      <td>June 13, 2018</td>\n",
-       "      <td>2.0.20</td>\n",
-       "      <td>4.0.3 and up</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>10813</th>\n",
-       "      <td>DICT.fr Mobile</td>\n",
-       "      <td>BUSINESS</td>\n",
-       "      <td>NaN</td>\n",
-       "      <td>20</td>\n",
-       "      <td>2.7M</td>\n",
-       "      <td>10,000+</td>\n",
-       "      <td>Free</td>\n",
-       "      <td>0</td>\n",
-       "      <td>Everyone</td>\n",
-       "      <td>Business</td>\n",
-       "      <td>July 17, 2018</td>\n",
-       "      <td>2.1.10</td>\n",
-       "      <td>4.1 and up</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>10814</th>\n",
-       "      <td>FR: My Secret Pets!</td>\n",
-       "      <td>FAMILY</td>\n",
-       "      <td>4.0</td>\n",
-       "      <td>785</td>\n",
-       "      <td>31M</td>\n",
-       "      <td>50,000+</td>\n",
-       "      <td>Free</td>\n",
-       "      <td>0</td>\n",
-       "      <td>Teen</td>\n",
-       "      <td>Entertainment</td>\n",
-       "      <td>June 3, 2015</td>\n",
-       "      <td>1.3.1</td>\n",
-       "      <td>3.0 and up</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>10815</th>\n",
-       "      <td>Golden Dictionary (FR-AR)</td>\n",
-       "      <td>BOOKS_AND_REFERENCE</td>\n",
-       "      <td>4.2</td>\n",
-       "      <td>5775</td>\n",
-       "      <td>4.9M</td>\n",
-       "      <td>500,000+</td>\n",
-       "      <td>Free</td>\n",
-       "      <td>0</td>\n",
-       "      <td>Everyone</td>\n",
-       "      <td>Books &amp; Reference</td>\n",
-       "      <td>July 19, 2018</td>\n",
-       "      <td>7.0.4.6</td>\n",
-       "      <td>4.2 and up</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>10816</th>\n",
-       "      <td>FieldBi FR Offline</td>\n",
-       "      <td>BUSINESS</td>\n",
-       "      <td>NaN</td>\n",
-       "      <td>2</td>\n",
-       "      <td>6.8M</td>\n",
-       "      <td>100+</td>\n",
-       "      <td>Free</td>\n",
-       "      <td>0</td>\n",
-       "      <td>Everyone</td>\n",
-       "      <td>Business</td>\n",
-       "      <td>August 6, 2018</td>\n",
-       "      <td>2.1.8</td>\n",
-       "      <td>4.1 and up</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>10817</th>\n",
-       "      <td>HTC Sense Input - FR</td>\n",
-       "      <td>TOOLS</td>\n",
-       "      <td>4.0</td>\n",
-       "      <td>885</td>\n",
-       "      <td>8.0M</td>\n",
-       "      <td>100,000+</td>\n",
-       "      <td>Free</td>\n",
-       "      <td>0</td>\n",
-       "      <td>Everyone</td>\n",
-       "      <td>Tools</td>\n",
-       "      <td>October 30, 2015</td>\n",
-       "      <td>1.0.612928</td>\n",
-       "      <td>5.0 and up</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>10818</th>\n",
-       "      <td>Gold Quote - Gold.fr</td>\n",
-       "      <td>FINANCE</td>\n",
-       "      <td>NaN</td>\n",
-       "      <td>96</td>\n",
-       "      <td>1.5M</td>\n",
-       "      <td>10,000+</td>\n",
-       "      <td>Free</td>\n",
-       "      <td>0</td>\n",
-       "      <td>Everyone</td>\n",
-       "      <td>Finance</td>\n",
-       "      <td>May 19, 2016</td>\n",
-       "      <td>2.3</td>\n",
-       "      <td>2.2 and up</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>10819</th>\n",
-       "      <td>Fanfic-FR</td>\n",
-       "      <td>BOOKS_AND_REFERENCE</td>\n",
-       "      <td>3.3</td>\n",
-       "      <td>52</td>\n",
-       "      <td>3.6M</td>\n",
-       "      <td>5,000+</td>\n",
-       "      <td>Free</td>\n",
-       "      <td>0</td>\n",
-       "      <td>Teen</td>\n",
-       "      <td>Books &amp; Reference</td>\n",
-       "      <td>August 5, 2017</td>\n",
-       "      <td>0.3.4</td>\n",
-       "      <td>4.1 and up</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>10820</th>\n",
-       "      <td>Fr. Daoud Lamei</td>\n",
-       "      <td>FAMILY</td>\n",
-       "      <td>5.0</td>\n",
-       "      <td>22</td>\n",
-       "      <td>8.6M</td>\n",
-       "      <td>1,000+</td>\n",
-       "      <td>Free</td>\n",
-       "      <td>0</td>\n",
-       "      <td>Teen</td>\n",
-       "      <td>Education</td>\n",
-       "      <td>June 27, 2018</td>\n",
-       "      <td>3.8.0</td>\n",
-       "      <td>4.1 and up</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>10821</th>\n",
-       "      <td>Poop FR</td>\n",
-       "      <td>FAMILY</td>\n",
-       "      <td>NaN</td>\n",
-       "      <td>6</td>\n",
-       "      <td>2.5M</td>\n",
-       "      <td>50+</td>\n",
-       "      <td>Free</td>\n",
-       "      <td>0</td>\n",
-       "      <td>Everyone</td>\n",
-       "      <td>Entertainment</td>\n",
-       "      <td>May 29, 2018</td>\n",
-       "      <td>1.0</td>\n",
-       "      <td>4.0.3 and up</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>10822</th>\n",
-       "      <td>PLMGSS FR</td>\n",
-       "      <td>PRODUCTIVITY</td>\n",
-       "      <td>NaN</td>\n",
-       "      <td>0</td>\n",
-       "      <td>3.1M</td>\n",
-       "      <td>10+</td>\n",
-       "      <td>Free</td>\n",
-       "      <td>0</td>\n",
-       "      <td>Everyone</td>\n",
-       "      <td>Productivity</td>\n",
-       "      <td>December 1, 2017</td>\n",
-       "      <td>1</td>\n",
-       "      <td>4.4 and up</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>10823</th>\n",
-       "      <td>List iptv FR</td>\n",
-       "      <td>VIDEO_PLAYERS</td>\n",
-       "      <td>NaN</td>\n",
-       "      <td>1</td>\n",
-       "      <td>2.9M</td>\n",
-       "      <td>100+</td>\n",
-       "      <td>Free</td>\n",
-       "      <td>0</td>\n",
-       "      <td>Everyone</td>\n",
-       "      <td>Video Players &amp; Editors</td>\n",
-       "      <td>April 22, 2018</td>\n",
-       "      <td>1.0</td>\n",
-       "      <td>4.0.3 and up</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>10824</th>\n",
-       "      <td>Cardio-FR</td>\n",
-       "      <td>MEDICAL</td>\n",
-       "      <td>NaN</td>\n",
-       "      <td>67</td>\n",
-       "      <td>82M</td>\n",
-       "      <td>10,000+</td>\n",
-       "      <td>Free</td>\n",
-       "      <td>0</td>\n",
-       "      <td>Everyone</td>\n",
-       "      <td>Medical</td>\n",
-       "      <td>July 31, 2018</td>\n",
-       "      <td>2.2.2</td>\n",
-       "      <td>4.4 and up</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>10825</th>\n",
-       "      <td>Naruto &amp; Boruto FR</td>\n",
-       "      <td>SOCIAL</td>\n",
-       "      <td>NaN</td>\n",
-       "      <td>7</td>\n",
-       "      <td>7.7M</td>\n",
-       "      <td>100+</td>\n",
-       "      <td>Free</td>\n",
-       "      <td>0</td>\n",
-       "      <td>Teen</td>\n",
-       "      <td>Social</td>\n",
-       "      <td>February 2, 2018</td>\n",
-       "      <td>1.0</td>\n",
-       "      <td>4.0 and up</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>10826</th>\n",
-       "      <td>Frim: get new friends on local chat rooms</td>\n",
-       "      <td>SOCIAL</td>\n",
-       "      <td>4.0</td>\n",
-       "      <td>88486</td>\n",
-       "      <td>Varies with device</td>\n",
-       "      <td>5,000,000+</td>\n",
-       "      <td>Free</td>\n",
-       "      <td>0</td>\n",
-       "      <td>Mature 17+</td>\n",
-       "      <td>Social</td>\n",
-       "      <td>March 23, 2018</td>\n",
-       "      <td>Varies with device</td>\n",
-       "      <td>Varies with device</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>10827</th>\n",
-       "      <td>Fr Agnel Ambarnath</td>\n",
-       "      <td>FAMILY</td>\n",
-       "      <td>4.2</td>\n",
-       "      <td>117</td>\n",
-       "      <td>13M</td>\n",
-       "      <td>5,000+</td>\n",
-       "      <td>Free</td>\n",
-       "      <td>0</td>\n",
-       "      <td>Everyone</td>\n",
-       "      <td>Education</td>\n",
-       "      <td>June 13, 2018</td>\n",
-       "      <td>2.0.20</td>\n",
-       "      <td>4.0.3 and up</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>10828</th>\n",
-       "      <td>Manga-FR - Anime Vostfr</td>\n",
-       "      <td>COMICS</td>\n",
-       "      <td>3.4</td>\n",
-       "      <td>291</td>\n",
-       "      <td>13M</td>\n",
-       "      <td>10,000+</td>\n",
-       "      <td>Free</td>\n",
-       "      <td>0</td>\n",
-       "      <td>Everyone</td>\n",
-       "      <td>Comics</td>\n",
-       "      <td>May 15, 2017</td>\n",
-       "      <td>2.0.1</td>\n",
-       "      <td>4.0 and up</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>10829</th>\n",
-       "      <td>Bulgarian French Dictionary Fr</td>\n",
-       "      <td>BOOKS_AND_REFERENCE</td>\n",
-       "      <td>4.6</td>\n",
-       "      <td>603</td>\n",
-       "      <td>7.4M</td>\n",
-       "      <td>10,000+</td>\n",
-       "      <td>Free</td>\n",
-       "      <td>0</td>\n",
-       "      <td>Everyone</td>\n",
-       "      <td>Books &amp; Reference</td>\n",
-       "      <td>June 19, 2016</td>\n",
-       "      <td>2.96</td>\n",
-       "      <td>4.1 and up</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>10830</th>\n",
-       "      <td>News Minecraft.fr</td>\n",
-       "      <td>NEWS_AND_MAGAZINES</td>\n",
-       "      <td>3.8</td>\n",
-       "      <td>881</td>\n",
-       "      <td>2.3M</td>\n",
-       "      <td>100,000+</td>\n",
-       "      <td>Free</td>\n",
-       "      <td>0</td>\n",
-       "      <td>Everyone</td>\n",
-       "      <td>News &amp; Magazines</td>\n",
-       "      <td>January 20, 2014</td>\n",
-       "      <td>1.5</td>\n",
-       "      <td>1.6 and up</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>10831</th>\n",
-       "      <td>payermonstationnement.fr</td>\n",
-       "      <td>MAPS_AND_NAVIGATION</td>\n",
-       "      <td>NaN</td>\n",
-       "      <td>38</td>\n",
-       "      <td>9.8M</td>\n",
-       "      <td>5,000+</td>\n",
-       "      <td>Free</td>\n",
-       "      <td>0</td>\n",
-       "      <td>Everyone</td>\n",
-       "      <td>Maps &amp; Navigation</td>\n",
-       "      <td>June 13, 2018</td>\n",
-       "      <td>2.0.148.0</td>\n",
-       "      <td>4.0 and up</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>10832</th>\n",
-       "      <td>FR Tides</td>\n",
-       "      <td>WEATHER</td>\n",
-       "      <td>3.8</td>\n",
-       "      <td>1195</td>\n",
-       "      <td>582k</td>\n",
-       "      <td>100,000+</td>\n",
-       "      <td>Free</td>\n",
-       "      <td>0</td>\n",
-       "      <td>Everyone</td>\n",
-       "      <td>Weather</td>\n",
-       "      <td>February 16, 2014</td>\n",
-       "      <td>6.0</td>\n",
-       "      <td>2.1 and up</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>10833</th>\n",
-       "      <td>Chemin (fr)</td>\n",
-       "      <td>BOOKS_AND_REFERENCE</td>\n",
-       "      <td>4.8</td>\n",
-       "      <td>44</td>\n",
-       "      <td>619k</td>\n",
-       "      <td>1,000+</td>\n",
-       "      <td>Free</td>\n",
-       "      <td>0</td>\n",
-       "      <td>Everyone</td>\n",
-       "      <td>Books &amp; Reference</td>\n",
-       "      <td>March 23, 2014</td>\n",
-       "      <td>0.8</td>\n",
-       "      <td>2.2 and up</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>10834</th>\n",
-       "      <td>FR Calculator</td>\n",
-       "      <td>FAMILY</td>\n",
-       "      <td>4.0</td>\n",
-       "      <td>7</td>\n",
-       "      <td>2.6M</td>\n",
-       "      <td>500+</td>\n",
-       "      <td>Free</td>\n",
-       "      <td>0</td>\n",
-       "      <td>Everyone</td>\n",
-       "      <td>Education</td>\n",
-       "      <td>June 18, 2017</td>\n",
-       "      <td>1.0.0</td>\n",
-       "      <td>4.1 and up</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>10835</th>\n",
-       "      <td>FR Forms</td>\n",
-       "      <td>BUSINESS</td>\n",
-       "      <td>NaN</td>\n",
-       "      <td>0</td>\n",
-       "      <td>9.6M</td>\n",
-       "      <td>10+</td>\n",
-       "      <td>Free</td>\n",
-       "      <td>0</td>\n",
-       "      <td>Everyone</td>\n",
-       "      <td>Business</td>\n",
-       "      <td>September 29, 2016</td>\n",
-       "      <td>1.1.5</td>\n",
-       "      <td>4.0 and up</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>10836</th>\n",
-       "      <td>Sya9a Maroc - FR</td>\n",
-       "      <td>FAMILY</td>\n",
-       "      <td>4.5</td>\n",
-       "      <td>38</td>\n",
-       "      <td>53M</td>\n",
-       "      <td>5,000+</td>\n",
-       "      <td>Free</td>\n",
-       "      <td>0</td>\n",
-       "      <td>Everyone</td>\n",
-       "      <td>Education</td>\n",
-       "      <td>July 25, 2017</td>\n",
-       "      <td>1.48</td>\n",
-       "      <td>4.1 and up</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>10837</th>\n",
-       "      <td>Fr. Mike Schmitz Audio Teachings</td>\n",
-       "      <td>FAMILY</td>\n",
-       "      <td>5.0</td>\n",
-       "      <td>4</td>\n",
-       "      <td>3.6M</td>\n",
-       "      <td>100+</td>\n",
-       "      <td>Free</td>\n",
-       "      <td>0</td>\n",
-       "      <td>Everyone</td>\n",
-       "      <td>Education</td>\n",
-       "      <td>July 6, 2018</td>\n",
-       "      <td>1.0</td>\n",
-       "      <td>4.1 and up</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>10838</th>\n",
-       "      <td>Parkinson Exercices FR</td>\n",
-       "      <td>MEDICAL</td>\n",
-       "      <td>NaN</td>\n",
-       "      <td>3</td>\n",
-       "      <td>9.5M</td>\n",
-       "      <td>1,000+</td>\n",
-       "      <td>Free</td>\n",
-       "      <td>0</td>\n",
-       "      <td>Everyone</td>\n",
-       "      <td>Medical</td>\n",
-       "      <td>January 20, 2017</td>\n",
-       "      <td>1.0</td>\n",
-       "      <td>2.2 and up</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>10839</th>\n",
-       "      <td>The SCP Foundation DB fr nn5n</td>\n",
-       "      <td>BOOKS_AND_REFERENCE</td>\n",
-       "      <td>4.5</td>\n",
-       "      <td>114</td>\n",
-       "      <td>Varies with device</td>\n",
-       "      <td>1,000+</td>\n",
-       "      <td>Free</td>\n",
-       "      <td>0</td>\n",
-       "      <td>Mature 17+</td>\n",
-       "      <td>Books &amp; Reference</td>\n",
-       "      <td>January 19, 2015</td>\n",
-       "      <td>Varies with device</td>\n",
-       "      <td>Varies with device</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>10840</th>\n",
-       "      <td>iHoroscope - 2018 Daily Horoscope &amp; Astrology</td>\n",
-       "      <td>LIFESTYLE</td>\n",
-       "      <td>4.5</td>\n",
-       "      <td>398307</td>\n",
-       "      <td>19M</td>\n",
-       "      <td>10,000,000+</td>\n",
-       "      <td>Free</td>\n",
-       "      <td>0</td>\n",
-       "      <td>Everyone</td>\n",
-       "      <td>Lifestyle</td>\n",
-       "      <td>July 25, 2018</td>\n",
-       "      <td>Varies with device</td>\n",
-       "      <td>Varies with device</td>\n",
-       "    </tr>\n",
-       "  </tbody>\n",
-       "</table>\n",
-       "<p>10841 rows × 13 columns</p>\n",
-       "</div>"
-      ],
-      "text/plain": [
-       "                                                     App             Category  \\\n",
-       "0         Photo Editor & Candy Camera & Grid & ScrapBook       ART_AND_DESIGN   \n",
-       "1                                    Coloring book moana       ART_AND_DESIGN   \n",
-       "2      U Launcher Lite – FREE Live Cool Themes, Hide ...       ART_AND_DESIGN   \n",
-       "3                                  Sketch - Draw & Paint       ART_AND_DESIGN   \n",
-       "4                  Pixel Draw - Number Art Coloring Book       ART_AND_DESIGN   \n",
-       "5                             Paper flowers instructions       ART_AND_DESIGN   \n",
-       "6                Smoke Effect Photo Maker - Smoke Editor       ART_AND_DESIGN   \n",
-       "7                                       Infinite Painter       ART_AND_DESIGN   \n",
-       "8                                   Garden Coloring Book       ART_AND_DESIGN   \n",
-       "9                          Kids Paint Free - Drawing Fun       ART_AND_DESIGN   \n",
-       "10                               Text on Photo - Fonteee       ART_AND_DESIGN   \n",
-       "11               Name Art Photo Editor - Focus n Filters       ART_AND_DESIGN   \n",
-       "12                        Tattoo Name On My Photo Editor       ART_AND_DESIGN   \n",
-       "13                                 Mandala Coloring Book       ART_AND_DESIGN   \n",
-       "14       3D Color Pixel by Number - Sandbox Art Coloring       ART_AND_DESIGN   \n",
-       "15                       Learn To Draw Kawaii Characters       ART_AND_DESIGN   \n",
-       "16          Photo Designer - Write your name with shapes       ART_AND_DESIGN   \n",
-       "17                              350 Diy Room Decor Ideas       ART_AND_DESIGN   \n",
-       "18                         FlipaClip - Cartoon animation       ART_AND_DESIGN   \n",
-       "19                                          ibis Paint X       ART_AND_DESIGN   \n",
-       "20                           Logo Maker - Small Business       ART_AND_DESIGN   \n",
-       "21             Boys Photo Editor - Six Pack & Men's Suit       ART_AND_DESIGN   \n",
-       "22               Superheroes Wallpapers | 4K Backgrounds       ART_AND_DESIGN   \n",
-       "23                                Mcqueen Coloring pages       ART_AND_DESIGN   \n",
-       "24                           HD Mickey Minnie Wallpapers       ART_AND_DESIGN   \n",
-       "25                            Harley Quinn wallpapers HD       ART_AND_DESIGN   \n",
-       "26                         Colorfit - Drawing & Coloring       ART_AND_DESIGN   \n",
-       "27                                 Animated Photo Editor       ART_AND_DESIGN   \n",
-       "28                                 Pencil Sketch Drawing       ART_AND_DESIGN   \n",
-       "29                       Easy Realistic Drawing Tutorial       ART_AND_DESIGN   \n",
-       "...                                                  ...                  ...   \n",
-       "10811                                        FR Plus 1.6    AUTO_AND_VEHICLES   \n",
-       "10812                                      Fr Agnel Pune               FAMILY   \n",
-       "10813                                     DICT.fr Mobile             BUSINESS   \n",
-       "10814                               FR: My Secret Pets!                FAMILY   \n",
-       "10815                          Golden Dictionary (FR-AR)  BOOKS_AND_REFERENCE   \n",
-       "10816                                 FieldBi FR Offline             BUSINESS   \n",
-       "10817                               HTC Sense Input - FR                TOOLS   \n",
-       "10818                               Gold Quote - Gold.fr              FINANCE   \n",
-       "10819                                          Fanfic-FR  BOOKS_AND_REFERENCE   \n",
-       "10820                                    Fr. Daoud Lamei               FAMILY   \n",
-       "10821                                            Poop FR               FAMILY   \n",
-       "10822                                          PLMGSS FR         PRODUCTIVITY   \n",
-       "10823                                       List iptv FR        VIDEO_PLAYERS   \n",
-       "10824                                          Cardio-FR              MEDICAL   \n",
-       "10825                                 Naruto & Boruto FR               SOCIAL   \n",
-       "10826          Frim: get new friends on local chat rooms               SOCIAL   \n",
-       "10827                                 Fr Agnel Ambarnath               FAMILY   \n",
-       "10828                            Manga-FR - Anime Vostfr               COMICS   \n",
-       "10829                     Bulgarian French Dictionary Fr  BOOKS_AND_REFERENCE   \n",
-       "10830                                  News Minecraft.fr   NEWS_AND_MAGAZINES   \n",
-       "10831                           payermonstationnement.fr  MAPS_AND_NAVIGATION   \n",
-       "10832                                           FR Tides              WEATHER   \n",
-       "10833                                        Chemin (fr)  BOOKS_AND_REFERENCE   \n",
-       "10834                                      FR Calculator               FAMILY   \n",
-       "10835                                           FR Forms             BUSINESS   \n",
-       "10836                                   Sya9a Maroc - FR               FAMILY   \n",
-       "10837                   Fr. Mike Schmitz Audio Teachings               FAMILY   \n",
-       "10838                             Parkinson Exercices FR              MEDICAL   \n",
-       "10839                      The SCP Foundation DB fr nn5n  BOOKS_AND_REFERENCE   \n",
-       "10840      iHoroscope - 2018 Daily Horoscope & Astrology            LIFESTYLE   \n",
-       "\n",
-       "       Rating Reviews                Size     Installs  Type Price  \\\n",
-       "0         4.1     159                 19M      10,000+  Free     0   \n",
-       "1         3.9     967                 14M     500,000+  Free     0   \n",
-       "2         4.7   87510                8.7M   5,000,000+  Free     0   \n",
-       "3         4.5  215644                 25M  50,000,000+  Free     0   \n",
-       "4         4.3     967                2.8M     100,000+  Free     0   \n",
-       "5         4.4     167                5.6M      50,000+  Free     0   \n",
-       "6         3.8     178                 19M      50,000+  Free     0   \n",
-       "7         4.1   36815                 29M   1,000,000+  Free     0   \n",
-       "8         4.4   13791                 33M   1,000,000+  Free     0   \n",
-       "9         4.7     121                3.1M      10,000+  Free     0   \n",
-       "10        4.4   13880                 28M   1,000,000+  Free     0   \n",
-       "11        4.4    8788                 12M   1,000,000+  Free     0   \n",
-       "12        4.2   44829                 20M  10,000,000+  Free     0   \n",
-       "13        4.6    4326                 21M     100,000+  Free     0   \n",
-       "14        4.4    1518                 37M     100,000+  Free     0   \n",
-       "15        3.2      55                2.7M       5,000+  Free     0   \n",
-       "16        4.7    3632                5.5M     500,000+  Free     0   \n",
-       "17        4.5      27                 17M      10,000+  Free     0   \n",
-       "18        4.3  194216                 39M   5,000,000+  Free     0   \n",
-       "19        4.6  224399                 31M  10,000,000+  Free     0   \n",
-       "20        4.0     450                 14M     100,000+  Free     0   \n",
-       "21        4.1     654                 12M     100,000+  Free     0   \n",
-       "22        4.7    7699                4.2M     500,000+  Free     0   \n",
-       "23        NaN      61                7.0M     100,000+  Free     0   \n",
-       "24        4.7     118                 23M      50,000+  Free     0   \n",
-       "25        4.8     192                6.0M      10,000+  Free     0   \n",
-       "26        4.7   20260                 25M     500,000+  Free     0   \n",
-       "27        4.1     203                6.1M     100,000+  Free     0   \n",
-       "28        3.9     136                4.6M      10,000+  Free     0   \n",
-       "29        4.1     223                4.2M     100,000+  Free     0   \n",
-       "...       ...     ...                 ...          ...   ...   ...   \n",
-       "10811     NaN       4                3.9M         100+  Free     0   \n",
-       "10812     4.1      80                 13M       1,000+  Free     0   \n",
-       "10813     NaN      20                2.7M      10,000+  Free     0   \n",
-       "10814     4.0     785                 31M      50,000+  Free     0   \n",
-       "10815     4.2    5775                4.9M     500,000+  Free     0   \n",
-       "10816     NaN       2                6.8M         100+  Free     0   \n",
-       "10817     4.0     885                8.0M     100,000+  Free     0   \n",
-       "10818     NaN      96                1.5M      10,000+  Free     0   \n",
-       "10819     3.3      52                3.6M       5,000+  Free     0   \n",
-       "10820     5.0      22                8.6M       1,000+  Free     0   \n",
-       "10821     NaN       6                2.5M          50+  Free     0   \n",
-       "10822     NaN       0                3.1M          10+  Free     0   \n",
-       "10823     NaN       1                2.9M         100+  Free     0   \n",
-       "10824     NaN      67                 82M      10,000+  Free     0   \n",
-       "10825     NaN       7                7.7M         100+  Free     0   \n",
-       "10826     4.0   88486  Varies with device   5,000,000+  Free     0   \n",
-       "10827     4.2     117                 13M       5,000+  Free     0   \n",
-       "10828     3.4     291                 13M      10,000+  Free     0   \n",
-       "10829     4.6     603                7.4M      10,000+  Free     0   \n",
-       "10830     3.8     881                2.3M     100,000+  Free     0   \n",
-       "10831     NaN      38                9.8M       5,000+  Free     0   \n",
-       "10832     3.8    1195                582k     100,000+  Free     0   \n",
-       "10833     4.8      44                619k       1,000+  Free     0   \n",
-       "10834     4.0       7                2.6M         500+  Free     0   \n",
-       "10835     NaN       0                9.6M          10+  Free     0   \n",
-       "10836     4.5      38                 53M       5,000+  Free     0   \n",
-       "10837     5.0       4                3.6M         100+  Free     0   \n",
-       "10838     NaN       3                9.5M       1,000+  Free     0   \n",
-       "10839     4.5     114  Varies with device       1,000+  Free     0   \n",
-       "10840     4.5  398307                 19M  10,000,000+  Free     0   \n",
-       "\n",
-       "      Content Rating                           Genres        Last Updated  \\\n",
-       "0           Everyone                     Art & Design     January 7, 2018   \n",
-       "1           Everyone        Art & Design;Pretend Play    January 15, 2018   \n",
-       "2           Everyone                     Art & Design      August 1, 2018   \n",
-       "3               Teen                     Art & Design        June 8, 2018   \n",
-       "4           Everyone          Art & Design;Creativity       June 20, 2018   \n",
-       "5           Everyone                     Art & Design      March 26, 2017   \n",
-       "6           Everyone                     Art & Design      April 26, 2018   \n",
-       "7           Everyone                     Art & Design       June 14, 2018   \n",
-       "8           Everyone                     Art & Design  September 20, 2017   \n",
-       "9           Everyone          Art & Design;Creativity        July 3, 2018   \n",
-       "10          Everyone                     Art & Design    October 27, 2017   \n",
-       "11          Everyone                     Art & Design       July 31, 2018   \n",
-       "12              Teen                     Art & Design       April 2, 2018   \n",
-       "13          Everyone                     Art & Design       June 26, 2018   \n",
-       "14          Everyone                     Art & Design      August 3, 2018   \n",
-       "15          Everyone                     Art & Design        June 6, 2018   \n",
-       "16          Everyone                     Art & Design       July 31, 2018   \n",
-       "17          Everyone                     Art & Design    November 7, 2017   \n",
-       "18          Everyone                     Art & Design      August 3, 2018   \n",
-       "19          Everyone                     Art & Design       July 30, 2018   \n",
-       "20          Everyone                     Art & Design      April 20, 2018   \n",
-       "21          Everyone                     Art & Design      March 20, 2018   \n",
-       "22      Everyone 10+                     Art & Design       July 12, 2018   \n",
-       "23          Everyone  Art & Design;Action & Adventure       March 7, 2018   \n",
-       "24          Everyone                     Art & Design        July 7, 2018   \n",
-       "25          Everyone                     Art & Design      April 25, 2018   \n",
-       "26          Everyone          Art & Design;Creativity    October 11, 2017   \n",
-       "27          Everyone                     Art & Design      March 21, 2018   \n",
-       "28          Everyone                     Art & Design       July 12, 2018   \n",
-       "29          Everyone                     Art & Design     August 22, 2017   \n",
-       "...              ...                              ...                 ...   \n",
-       "10811       Everyone                  Auto & Vehicles       July 24, 2018   \n",
-       "10812       Everyone                        Education       June 13, 2018   \n",
-       "10813       Everyone                         Business       July 17, 2018   \n",
-       "10814           Teen                    Entertainment        June 3, 2015   \n",
-       "10815       Everyone                Books & Reference       July 19, 2018   \n",
-       "10816       Everyone                         Business      August 6, 2018   \n",
-       "10817       Everyone                            Tools    October 30, 2015   \n",
-       "10818       Everyone                          Finance        May 19, 2016   \n",
-       "10819           Teen                Books & Reference      August 5, 2017   \n",
-       "10820           Teen                        Education       June 27, 2018   \n",
-       "10821       Everyone                    Entertainment        May 29, 2018   \n",
-       "10822       Everyone                     Productivity    December 1, 2017   \n",
-       "10823       Everyone          Video Players & Editors      April 22, 2018   \n",
-       "10824       Everyone                          Medical       July 31, 2018   \n",
-       "10825           Teen                           Social    February 2, 2018   \n",
-       "10826     Mature 17+                           Social      March 23, 2018   \n",
-       "10827       Everyone                        Education       June 13, 2018   \n",
-       "10828       Everyone                           Comics        May 15, 2017   \n",
-       "10829       Everyone                Books & Reference       June 19, 2016   \n",
-       "10830       Everyone                 News & Magazines    January 20, 2014   \n",
-       "10831       Everyone                Maps & Navigation       June 13, 2018   \n",
-       "10832       Everyone                          Weather   February 16, 2014   \n",
-       "10833       Everyone                Books & Reference      March 23, 2014   \n",
-       "10834       Everyone                        Education       June 18, 2017   \n",
-       "10835       Everyone                         Business  September 29, 2016   \n",
-       "10836       Everyone                        Education       July 25, 2017   \n",
-       "10837       Everyone                        Education        July 6, 2018   \n",
-       "10838       Everyone                          Medical    January 20, 2017   \n",
-       "10839     Mature 17+                Books & Reference    January 19, 2015   \n",
-       "10840       Everyone                        Lifestyle       July 25, 2018   \n",
-       "\n",
-       "              Current Ver         Android Ver  \n",
-       "0                   1.0.0        4.0.3 and up  \n",
-       "1                   2.0.0        4.0.3 and up  \n",
-       "2                   1.2.4        4.0.3 and up  \n",
-       "3      Varies with device          4.2 and up  \n",
-       "4                     1.1          4.4 and up  \n",
-       "5                     1.0          2.3 and up  \n",
-       "6                     1.1        4.0.3 and up  \n",
-       "7                6.1.61.1          4.2 and up  \n",
-       "8                   2.9.2          3.0 and up  \n",
-       "9                     2.8        4.0.3 and up  \n",
-       "10                  1.0.4          4.1 and up  \n",
-       "11                 1.0.15          4.0 and up  \n",
-       "12                    3.8          4.1 and up  \n",
-       "13                  1.0.4          4.4 and up  \n",
-       "14                  1.2.3          2.3 and up  \n",
-       "15                    NaN          4.2 and up  \n",
-       "16                    3.1          4.1 and up  \n",
-       "17                    1.0          2.3 and up  \n",
-       "18                  2.2.5        4.0.3 and up  \n",
-       "19                  5.5.4          4.1 and up  \n",
-       "20                    4.0          4.1 and up  \n",
-       "21                    1.1        4.0.3 and up  \n",
-       "22                2.2.6.2        4.0.3 and up  \n",
-       "23                  1.0.0          4.1 and up  \n",
-       "24                  1.1.3          4.1 and up  \n",
-       "25                    1.5          3.0 and up  \n",
-       "26                  1.0.8        4.0.3 and up  \n",
-       "27                   1.03        4.0.3 and up  \n",
-       "28                    6.0          2.3 and up  \n",
-       "29                    1.0          2.3 and up  \n",
-       "...                   ...                 ...  \n",
-       "10811               1.3.6         4.4W and up  \n",
-       "10812              2.0.20        4.0.3 and up  \n",
-       "10813              2.1.10          4.1 and up  \n",
-       "10814               1.3.1          3.0 and up  \n",
-       "10815             7.0.4.6          4.2 and up  \n",
-       "10816               2.1.8          4.1 and up  \n",
-       "10817          1.0.612928          5.0 and up  \n",
-       "10818                 2.3          2.2 and up  \n",
-       "10819               0.3.4          4.1 and up  \n",
-       "10820               3.8.0          4.1 and up  \n",
-       "10821                 1.0        4.0.3 and up  \n",
-       "10822                   1          4.4 and up  \n",
-       "10823                 1.0        4.0.3 and up  \n",
-       "10824               2.2.2          4.4 and up  \n",
-       "10825                 1.0          4.0 and up  \n",
-       "10826  Varies with device  Varies with device  \n",
-       "10827              2.0.20        4.0.3 and up  \n",
-       "10828               2.0.1          4.0 and up  \n",
-       "10829                2.96          4.1 and up  \n",
-       "10830                 1.5          1.6 and up  \n",
-       "10831           2.0.148.0          4.0 and up  \n",
-       "10832                 6.0          2.1 and up  \n",
-       "10833                 0.8          2.2 and up  \n",
-       "10834               1.0.0          4.1 and up  \n",
-       "10835               1.1.5          4.0 and up  \n",
-       "10836                1.48          4.1 and up  \n",
-       "10837                 1.0          4.1 and up  \n",
-       "10838                 1.0          2.2 and up  \n",
-       "10839  Varies with device  Varies with device  \n",
-       "10840  Varies with device  Varies with device  \n",
-       "\n",
-       "[10841 rows x 13 columns]"
-      ]
-     },
-     "execution_count": 2,
-     "metadata": {},
-     "output_type": "execute_result"
+
+
+```python
+import numpy as np
+import pandas as pd
+import seaborn as sns
+
+```
+
+
+```python
+data = pd.read_csv('googleplaystore.csv')
+data
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
     }
-   ],
-   "source": [
-    "data = pd.read_csv('googleplaystore.csv')\n",
-    "data"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 3,
-   "metadata": {
-    "scrolled": true
-   },
-   "outputs": [
-    {
-     "data": {
-      "text/html": [
-       "<div>\n",
-       "<style scoped>\n",
-       "    .dataframe tbody tr th:only-of-type {\n",
-       "        vertical-align: middle;\n",
-       "    }\n",
-       "\n",
-       "    .dataframe tbody tr th {\n",
-       "        vertical-align: top;\n",
-       "    }\n",
-       "\n",
-       "    .dataframe thead th {\n",
-       "        text-align: right;\n",
-       "    }\n",
-       "</style>\n",
-       "<table border=\"1\" class=\"dataframe\">\n",
-       "  <thead>\n",
-       "    <tr style=\"text-align: right;\">\n",
-       "      <th></th>\n",
-       "      <th>App</th>\n",
-       "      <th>Category</th>\n",
-       "      <th>Rating</th>\n",
-       "      <th>Reviews</th>\n",
-       "      <th>Size</th>\n",
-       "      <th>Installs</th>\n",
-       "      <th>Type</th>\n",
-       "      <th>Price</th>\n",
-       "      <th>Content Rating</th>\n",
-       "      <th>Genres</th>\n",
-       "      <th>Last Updated</th>\n",
-       "      <th>Current Ver</th>\n",
-       "      <th>Android Ver</th>\n",
-       "    </tr>\n",
-       "  </thead>\n",
-       "  <tbody>\n",
-       "    <tr>\n",
-       "      <th>968</th>\n",
-       "      <td>Movies by Flixster, with Rotten Tomatoes</td>\n",
-       "      <td>ENTERTAINMENT</td>\n",
-       "      <td>4.5</td>\n",
-       "      <td>653008</td>\n",
-       "      <td>16M</td>\n",
-       "      <td>10000000</td>\n",
-       "      <td>Free</td>\n",
-       "      <td>0</td>\n",
-       "      <td>Everyone</td>\n",
-       "      <td>Entertainment</td>\n",
-       "      <td>June 20, 2018</td>\n",
-       "      <td>9.1.4</td>\n",
-       "      <td>4.4 and up</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>9943</th>\n",
-       "      <td>ChargeHub - Find EV &amp; Tesla Charging Stations</td>\n",
-       "      <td>MAPS_AND_NAVIGATION</td>\n",
-       "      <td>4.6</td>\n",
-       "      <td>796</td>\n",
-       "      <td>25M</td>\n",
-       "      <td>50000</td>\n",
-       "      <td>Free</td>\n",
-       "      <td>0</td>\n",
-       "      <td>Everyone</td>\n",
-       "      <td>Maps &amp; Navigation</td>\n",
-       "      <td>May 18, 2018</td>\n",
-       "      <td>6.7.0</td>\n",
-       "      <td>4.0.3 and up</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>9888</th>\n",
-       "      <td>Speed Racing Ultimate 2</td>\n",
-       "      <td>GAME</td>\n",
-       "      <td>4.1</td>\n",
-       "      <td>66894</td>\n",
-       "      <td>Varies with device</td>\n",
-       "      <td>1000000</td>\n",
-       "      <td>Free</td>\n",
-       "      <td>0</td>\n",
-       "      <td>Everyone 10+</td>\n",
-       "      <td>Racing</td>\n",
-       "      <td>July 21, 2018</td>\n",
-       "      <td>Varies with device</td>\n",
-       "      <td>Varies with device</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>1243</th>\n",
-       "      <td>Eat24 Food Delivery &amp; Takeout</td>\n",
-       "      <td>FOOD_AND_DRINK</td>\n",
-       "      <td>4.3</td>\n",
-       "      <td>40116</td>\n",
-       "      <td>Varies with device</td>\n",
-       "      <td>1000000</td>\n",
-       "      <td>Free</td>\n",
-       "      <td>0</td>\n",
-       "      <td>Everyone</td>\n",
-       "      <td>Food &amp; Drink</td>\n",
-       "      <td>August 2, 2018</td>\n",
-       "      <td>Varies with device</td>\n",
-       "      <td>Varies with device</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>9716</th>\n",
-       "      <td>EP Kalkulator el. energije</td>\n",
-       "      <td>TOOLS</td>\n",
-       "      <td>4.4</td>\n",
-       "      <td>13</td>\n",
-       "      <td>1.5M</td>\n",
-       "      <td>100</td>\n",
-       "      <td>Free</td>\n",
-       "      <td>0</td>\n",
-       "      <td>Everyone</td>\n",
-       "      <td>Tools</td>\n",
-       "      <td>February 20, 2015</td>\n",
-       "      <td>4.0</td>\n",
-       "      <td>4.0 and up</td>\n",
-       "    </tr>\n",
-       "  </tbody>\n",
-       "</table>\n",
-       "</div>"
-      ],
-      "text/plain": [
-       "                                                App             Category  \\\n",
-       "968        Movies by Flixster, with Rotten Tomatoes        ENTERTAINMENT   \n",
-       "9943  ChargeHub - Find EV & Tesla Charging Stations  MAPS_AND_NAVIGATION   \n",
-       "9888                        Speed Racing Ultimate 2                 GAME   \n",
-       "1243                  Eat24 Food Delivery & Takeout       FOOD_AND_DRINK   \n",
-       "9716                     EP Kalkulator el. energije                TOOLS   \n",
-       "\n",
-       "      Rating Reviews                Size  Installs  Type Price Content Rating  \\\n",
-       "968      4.5  653008                 16M  10000000  Free     0       Everyone   \n",
-       "9943     4.6     796                 25M     50000  Free     0       Everyone   \n",
-       "9888     4.1   66894  Varies with device   1000000  Free     0   Everyone 10+   \n",
-       "1243     4.3   40116  Varies with device   1000000  Free     0       Everyone   \n",
-       "9716     4.4      13                1.5M       100  Free     0       Everyone   \n",
-       "\n",
-       "                 Genres       Last Updated         Current Ver  \\\n",
-       "968       Entertainment      June 20, 2018               9.1.4   \n",
-       "9943  Maps & Navigation       May 18, 2018               6.7.0   \n",
-       "9888             Racing      July 21, 2018  Varies with device   \n",
-       "1243       Food & Drink     August 2, 2018  Varies with device   \n",
-       "9716              Tools  February 20, 2015                 4.0   \n",
-       "\n",
-       "             Android Ver  \n",
-       "968           4.4 and up  \n",
-       "9943        4.0.3 and up  \n",
-       "9888  Varies with device  \n",
-       "1243  Varies with device  \n",
-       "9716          4.0 and up  "
-      ]
-     },
-     "execution_count": 3,
-     "metadata": {},
-     "output_type": "execute_result"
+
+    .dataframe tbody tr th {
+        vertical-align: top;
     }
-   ],
-   "source": [
-    "## Converting the String Installs to number by removing unwanted characters\n",
-    "data.Installs = data['Installs'].map(lambda x: x.rstrip('+').replace(',','').replace('Free', '0'))\n",
-    "data.Installs = data.Installs.astype(int)\n",
-    "data.sample(5)"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "#### The null values present in the data set are"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 4,
-   "metadata": {
-    "scrolled": true
-   },
-   "outputs": [
-    {
-     "data": {
-      "text/plain": [
-       "App                  0\n",
-       "Category             0\n",
-       "Rating            1474\n",
-       "Reviews              0\n",
-       "Size                 0\n",
-       "Installs             0\n",
-       "Type                 1\n",
-       "Price                0\n",
-       "Content Rating       1\n",
-       "Genres               0\n",
-       "Last Updated         0\n",
-       "Current Ver          8\n",
-       "Android Ver          3\n",
-       "dtype: int64"
-      ]
-     },
-     "execution_count": 4,
-     "metadata": {},
-     "output_type": "execute_result"
+
+    .dataframe thead th {
+        text-align: right;
     }
-   ],
-   "source": [
-    "\n",
-    "data.isnull().sum()"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "Since the count of ratings which are null are high and some of them greater than 5 lets remove them"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 5,
-   "metadata": {},
-   "outputs": [
-    {
-     "data": {
-      "text/plain": [
-       "count    9092.000000\n",
-       "mean        4.167400\n",
-       "std         0.503159\n",
-       "min         1.000000\n",
-       "25%         4.000000\n",
-       "50%         4.300000\n",
-       "75%         4.500000\n",
-       "max         4.900000\n",
-       "Name: Rating, dtype: float64"
-      ]
-     },
-     "execution_count": 5,
-     "metadata": {},
-     "output_type": "execute_result"
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>App</th>
+      <th>Category</th>
+      <th>Rating</th>
+      <th>Reviews</th>
+      <th>Size</th>
+      <th>Installs</th>
+      <th>Type</th>
+      <th>Price</th>
+      <th>Content Rating</th>
+      <th>Genres</th>
+      <th>Last Updated</th>
+      <th>Current Ver</th>
+      <th>Android Ver</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Photo Editor &amp; Candy Camera &amp; Grid &amp; ScrapBook</td>
+      <td>ART_AND_DESIGN</td>
+      <td>4.1</td>
+      <td>159</td>
+      <td>19M</td>
+      <td>10,000+</td>
+      <td>Free</td>
+      <td>0</td>
+      <td>Everyone</td>
+      <td>Art &amp; Design</td>
+      <td>January 7, 2018</td>
+      <td>1.0.0</td>
+      <td>4.0.3 and up</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Coloring book moana</td>
+      <td>ART_AND_DESIGN</td>
+      <td>3.9</td>
+      <td>967</td>
+      <td>14M</td>
+      <td>500,000+</td>
+      <td>Free</td>
+      <td>0</td>
+      <td>Everyone</td>
+      <td>Art &amp; Design;Pretend Play</td>
+      <td>January 15, 2018</td>
+      <td>2.0.0</td>
+      <td>4.0.3 and up</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>U Launcher Lite – FREE Live Cool Themes, Hide ...</td>
+      <td>ART_AND_DESIGN</td>
+      <td>4.7</td>
+      <td>87510</td>
+      <td>8.7M</td>
+      <td>5,000,000+</td>
+      <td>Free</td>
+      <td>0</td>
+      <td>Everyone</td>
+      <td>Art &amp; Design</td>
+      <td>August 1, 2018</td>
+      <td>1.2.4</td>
+      <td>4.0.3 and up</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Sketch - Draw &amp; Paint</td>
+      <td>ART_AND_DESIGN</td>
+      <td>4.5</td>
+      <td>215644</td>
+      <td>25M</td>
+      <td>50,000,000+</td>
+      <td>Free</td>
+      <td>0</td>
+      <td>Teen</td>
+      <td>Art &amp; Design</td>
+      <td>June 8, 2018</td>
+      <td>Varies with device</td>
+      <td>4.2 and up</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Pixel Draw - Number Art Coloring Book</td>
+      <td>ART_AND_DESIGN</td>
+      <td>4.3</td>
+      <td>967</td>
+      <td>2.8M</td>
+      <td>100,000+</td>
+      <td>Free</td>
+      <td>0</td>
+      <td>Everyone</td>
+      <td>Art &amp; Design;Creativity</td>
+      <td>June 20, 2018</td>
+      <td>1.1</td>
+      <td>4.4 and up</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>Paper flowers instructions</td>
+      <td>ART_AND_DESIGN</td>
+      <td>4.4</td>
+      <td>167</td>
+      <td>5.6M</td>
+      <td>50,000+</td>
+      <td>Free</td>
+      <td>0</td>
+      <td>Everyone</td>
+      <td>Art &amp; Design</td>
+      <td>March 26, 2017</td>
+      <td>1.0</td>
+      <td>2.3 and up</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>Smoke Effect Photo Maker - Smoke Editor</td>
+      <td>ART_AND_DESIGN</td>
+      <td>3.8</td>
+      <td>178</td>
+      <td>19M</td>
+      <td>50,000+</td>
+      <td>Free</td>
+      <td>0</td>
+      <td>Everyone</td>
+      <td>Art &amp; Design</td>
+      <td>April 26, 2018</td>
+      <td>1.1</td>
+      <td>4.0.3 and up</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>Infinite Painter</td>
+      <td>ART_AND_DESIGN</td>
+      <td>4.1</td>
+      <td>36815</td>
+      <td>29M</td>
+      <td>1,000,000+</td>
+      <td>Free</td>
+      <td>0</td>
+      <td>Everyone</td>
+      <td>Art &amp; Design</td>
+      <td>June 14, 2018</td>
+      <td>6.1.61.1</td>
+      <td>4.2 and up</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>Garden Coloring Book</td>
+      <td>ART_AND_DESIGN</td>
+      <td>4.4</td>
+      <td>13791</td>
+      <td>33M</td>
+      <td>1,000,000+</td>
+      <td>Free</td>
+      <td>0</td>
+      <td>Everyone</td>
+      <td>Art &amp; Design</td>
+      <td>September 20, 2017</td>
+      <td>2.9.2</td>
+      <td>3.0 and up</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>Kids Paint Free - Drawing Fun</td>
+      <td>ART_AND_DESIGN</td>
+      <td>4.7</td>
+      <td>121</td>
+      <td>3.1M</td>
+      <td>10,000+</td>
+      <td>Free</td>
+      <td>0</td>
+      <td>Everyone</td>
+      <td>Art &amp; Design;Creativity</td>
+      <td>July 3, 2018</td>
+      <td>2.8</td>
+      <td>4.0.3 and up</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>Text on Photo - Fonteee</td>
+      <td>ART_AND_DESIGN</td>
+      <td>4.4</td>
+      <td>13880</td>
+      <td>28M</td>
+      <td>1,000,000+</td>
+      <td>Free</td>
+      <td>0</td>
+      <td>Everyone</td>
+      <td>Art &amp; Design</td>
+      <td>October 27, 2017</td>
+      <td>1.0.4</td>
+      <td>4.1 and up</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>Name Art Photo Editor - Focus n Filters</td>
+      <td>ART_AND_DESIGN</td>
+      <td>4.4</td>
+      <td>8788</td>
+      <td>12M</td>
+      <td>1,000,000+</td>
+      <td>Free</td>
+      <td>0</td>
+      <td>Everyone</td>
+      <td>Art &amp; Design</td>
+      <td>July 31, 2018</td>
+      <td>1.0.15</td>
+      <td>4.0 and up</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>Tattoo Name On My Photo Editor</td>
+      <td>ART_AND_DESIGN</td>
+      <td>4.2</td>
+      <td>44829</td>
+      <td>20M</td>
+      <td>10,000,000+</td>
+      <td>Free</td>
+      <td>0</td>
+      <td>Teen</td>
+      <td>Art &amp; Design</td>
+      <td>April 2, 2018</td>
+      <td>3.8</td>
+      <td>4.1 and up</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>Mandala Coloring Book</td>
+      <td>ART_AND_DESIGN</td>
+      <td>4.6</td>
+      <td>4326</td>
+      <td>21M</td>
+      <td>100,000+</td>
+      <td>Free</td>
+      <td>0</td>
+      <td>Everyone</td>
+      <td>Art &amp; Design</td>
+      <td>June 26, 2018</td>
+      <td>1.0.4</td>
+      <td>4.4 and up</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>3D Color Pixel by Number - Sandbox Art Coloring</td>
+      <td>ART_AND_DESIGN</td>
+      <td>4.4</td>
+      <td>1518</td>
+      <td>37M</td>
+      <td>100,000+</td>
+      <td>Free</td>
+      <td>0</td>
+      <td>Everyone</td>
+      <td>Art &amp; Design</td>
+      <td>August 3, 2018</td>
+      <td>1.2.3</td>
+      <td>2.3 and up</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>Learn To Draw Kawaii Characters</td>
+      <td>ART_AND_DESIGN</td>
+      <td>3.2</td>
+      <td>55</td>
+      <td>2.7M</td>
+      <td>5,000+</td>
+      <td>Free</td>
+      <td>0</td>
+      <td>Everyone</td>
+      <td>Art &amp; Design</td>
+      <td>June 6, 2018</td>
+      <td>NaN</td>
+      <td>4.2 and up</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>Photo Designer - Write your name with shapes</td>
+      <td>ART_AND_DESIGN</td>
+      <td>4.7</td>
+      <td>3632</td>
+      <td>5.5M</td>
+      <td>500,000+</td>
+      <td>Free</td>
+      <td>0</td>
+      <td>Everyone</td>
+      <td>Art &amp; Design</td>
+      <td>July 31, 2018</td>
+      <td>3.1</td>
+      <td>4.1 and up</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>350 Diy Room Decor Ideas</td>
+      <td>ART_AND_DESIGN</td>
+      <td>4.5</td>
+      <td>27</td>
+      <td>17M</td>
+      <td>10,000+</td>
+      <td>Free</td>
+      <td>0</td>
+      <td>Everyone</td>
+      <td>Art &amp; Design</td>
+      <td>November 7, 2017</td>
+      <td>1.0</td>
+      <td>2.3 and up</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>FlipaClip - Cartoon animation</td>
+      <td>ART_AND_DESIGN</td>
+      <td>4.3</td>
+      <td>194216</td>
+      <td>39M</td>
+      <td>5,000,000+</td>
+      <td>Free</td>
+      <td>0</td>
+      <td>Everyone</td>
+      <td>Art &amp; Design</td>
+      <td>August 3, 2018</td>
+      <td>2.2.5</td>
+      <td>4.0.3 and up</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>ibis Paint X</td>
+      <td>ART_AND_DESIGN</td>
+      <td>4.6</td>
+      <td>224399</td>
+      <td>31M</td>
+      <td>10,000,000+</td>
+      <td>Free</td>
+      <td>0</td>
+      <td>Everyone</td>
+      <td>Art &amp; Design</td>
+      <td>July 30, 2018</td>
+      <td>5.5.4</td>
+      <td>4.1 and up</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <td>Logo Maker - Small Business</td>
+      <td>ART_AND_DESIGN</td>
+      <td>4.0</td>
+      <td>450</td>
+      <td>14M</td>
+      <td>100,000+</td>
+      <td>Free</td>
+      <td>0</td>
+      <td>Everyone</td>
+      <td>Art &amp; Design</td>
+      <td>April 20, 2018</td>
+      <td>4.0</td>
+      <td>4.1 and up</td>
+    </tr>
+    <tr>
+      <th>21</th>
+      <td>Boys Photo Editor - Six Pack &amp; Men's Suit</td>
+      <td>ART_AND_DESIGN</td>
+      <td>4.1</td>
+      <td>654</td>
+      <td>12M</td>
+      <td>100,000+</td>
+      <td>Free</td>
+      <td>0</td>
+      <td>Everyone</td>
+      <td>Art &amp; Design</td>
+      <td>March 20, 2018</td>
+      <td>1.1</td>
+      <td>4.0.3 and up</td>
+    </tr>
+    <tr>
+      <th>22</th>
+      <td>Superheroes Wallpapers | 4K Backgrounds</td>
+      <td>ART_AND_DESIGN</td>
+      <td>4.7</td>
+      <td>7699</td>
+      <td>4.2M</td>
+      <td>500,000+</td>
+      <td>Free</td>
+      <td>0</td>
+      <td>Everyone 10+</td>
+      <td>Art &amp; Design</td>
+      <td>July 12, 2018</td>
+      <td>2.2.6.2</td>
+      <td>4.0.3 and up</td>
+    </tr>
+    <tr>
+      <th>23</th>
+      <td>Mcqueen Coloring pages</td>
+      <td>ART_AND_DESIGN</td>
+      <td>NaN</td>
+      <td>61</td>
+      <td>7.0M</td>
+      <td>100,000+</td>
+      <td>Free</td>
+      <td>0</td>
+      <td>Everyone</td>
+      <td>Art &amp; Design;Action &amp; Adventure</td>
+      <td>March 7, 2018</td>
+      <td>1.0.0</td>
+      <td>4.1 and up</td>
+    </tr>
+    <tr>
+      <th>24</th>
+      <td>HD Mickey Minnie Wallpapers</td>
+      <td>ART_AND_DESIGN</td>
+      <td>4.7</td>
+      <td>118</td>
+      <td>23M</td>
+      <td>50,000+</td>
+      <td>Free</td>
+      <td>0</td>
+      <td>Everyone</td>
+      <td>Art &amp; Design</td>
+      <td>July 7, 2018</td>
+      <td>1.1.3</td>
+      <td>4.1 and up</td>
+    </tr>
+    <tr>
+      <th>25</th>
+      <td>Harley Quinn wallpapers HD</td>
+      <td>ART_AND_DESIGN</td>
+      <td>4.8</td>
+      <td>192</td>
+      <td>6.0M</td>
+      <td>10,000+</td>
+      <td>Free</td>
+      <td>0</td>
+      <td>Everyone</td>
+      <td>Art &amp; Design</td>
+      <td>April 25, 2018</td>
+      <td>1.5</td>
+      <td>3.0 and up</td>
+    </tr>
+    <tr>
+      <th>26</th>
+      <td>Colorfit - Drawing &amp; Coloring</td>
+      <td>ART_AND_DESIGN</td>
+      <td>4.7</td>
+      <td>20260</td>
+      <td>25M</td>
+      <td>500,000+</td>
+      <td>Free</td>
+      <td>0</td>
+      <td>Everyone</td>
+      <td>Art &amp; Design;Creativity</td>
+      <td>October 11, 2017</td>
+      <td>1.0.8</td>
+      <td>4.0.3 and up</td>
+    </tr>
+    <tr>
+      <th>27</th>
+      <td>Animated Photo Editor</td>
+      <td>ART_AND_DESIGN</td>
+      <td>4.1</td>
+      <td>203</td>
+      <td>6.1M</td>
+      <td>100,000+</td>
+      <td>Free</td>
+      <td>0</td>
+      <td>Everyone</td>
+      <td>Art &amp; Design</td>
+      <td>March 21, 2018</td>
+      <td>1.03</td>
+      <td>4.0.3 and up</td>
+    </tr>
+    <tr>
+      <th>28</th>
+      <td>Pencil Sketch Drawing</td>
+      <td>ART_AND_DESIGN</td>
+      <td>3.9</td>
+      <td>136</td>
+      <td>4.6M</td>
+      <td>10,000+</td>
+      <td>Free</td>
+      <td>0</td>
+      <td>Everyone</td>
+      <td>Art &amp; Design</td>
+      <td>July 12, 2018</td>
+      <td>6.0</td>
+      <td>2.3 and up</td>
+    </tr>
+    <tr>
+      <th>29</th>
+      <td>Easy Realistic Drawing Tutorial</td>
+      <td>ART_AND_DESIGN</td>
+      <td>4.1</td>
+      <td>223</td>
+      <td>4.2M</td>
+      <td>100,000+</td>
+      <td>Free</td>
+      <td>0</td>
+      <td>Everyone</td>
+      <td>Art &amp; Design</td>
+      <td>August 22, 2017</td>
+      <td>1.0</td>
+      <td>2.3 and up</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>10811</th>
+      <td>FR Plus 1.6</td>
+      <td>AUTO_AND_VEHICLES</td>
+      <td>NaN</td>
+      <td>4</td>
+      <td>3.9M</td>
+      <td>100+</td>
+      <td>Free</td>
+      <td>0</td>
+      <td>Everyone</td>
+      <td>Auto &amp; Vehicles</td>
+      <td>July 24, 2018</td>
+      <td>1.3.6</td>
+      <td>4.4W and up</td>
+    </tr>
+    <tr>
+      <th>10812</th>
+      <td>Fr Agnel Pune</td>
+      <td>FAMILY</td>
+      <td>4.1</td>
+      <td>80</td>
+      <td>13M</td>
+      <td>1,000+</td>
+      <td>Free</td>
+      <td>0</td>
+      <td>Everyone</td>
+      <td>Education</td>
+      <td>June 13, 2018</td>
+      <td>2.0.20</td>
+      <td>4.0.3 and up</td>
+    </tr>
+    <tr>
+      <th>10813</th>
+      <td>DICT.fr Mobile</td>
+      <td>BUSINESS</td>
+      <td>NaN</td>
+      <td>20</td>
+      <td>2.7M</td>
+      <td>10,000+</td>
+      <td>Free</td>
+      <td>0</td>
+      <td>Everyone</td>
+      <td>Business</td>
+      <td>July 17, 2018</td>
+      <td>2.1.10</td>
+      <td>4.1 and up</td>
+    </tr>
+    <tr>
+      <th>10814</th>
+      <td>FR: My Secret Pets!</td>
+      <td>FAMILY</td>
+      <td>4.0</td>
+      <td>785</td>
+      <td>31M</td>
+      <td>50,000+</td>
+      <td>Free</td>
+      <td>0</td>
+      <td>Teen</td>
+      <td>Entertainment</td>
+      <td>June 3, 2015</td>
+      <td>1.3.1</td>
+      <td>3.0 and up</td>
+    </tr>
+    <tr>
+      <th>10815</th>
+      <td>Golden Dictionary (FR-AR)</td>
+      <td>BOOKS_AND_REFERENCE</td>
+      <td>4.2</td>
+      <td>5775</td>
+      <td>4.9M</td>
+      <td>500,000+</td>
+      <td>Free</td>
+      <td>0</td>
+      <td>Everyone</td>
+      <td>Books &amp; Reference</td>
+      <td>July 19, 2018</td>
+      <td>7.0.4.6</td>
+      <td>4.2 and up</td>
+    </tr>
+    <tr>
+      <th>10816</th>
+      <td>FieldBi FR Offline</td>
+      <td>BUSINESS</td>
+      <td>NaN</td>
+      <td>2</td>
+      <td>6.8M</td>
+      <td>100+</td>
+      <td>Free</td>
+      <td>0</td>
+      <td>Everyone</td>
+      <td>Business</td>
+      <td>August 6, 2018</td>
+      <td>2.1.8</td>
+      <td>4.1 and up</td>
+    </tr>
+    <tr>
+      <th>10817</th>
+      <td>HTC Sense Input - FR</td>
+      <td>TOOLS</td>
+      <td>4.0</td>
+      <td>885</td>
+      <td>8.0M</td>
+      <td>100,000+</td>
+      <td>Free</td>
+      <td>0</td>
+      <td>Everyone</td>
+      <td>Tools</td>
+      <td>October 30, 2015</td>
+      <td>1.0.612928</td>
+      <td>5.0 and up</td>
+    </tr>
+    <tr>
+      <th>10818</th>
+      <td>Gold Quote - Gold.fr</td>
+      <td>FINANCE</td>
+      <td>NaN</td>
+      <td>96</td>
+      <td>1.5M</td>
+      <td>10,000+</td>
+      <td>Free</td>
+      <td>0</td>
+      <td>Everyone</td>
+      <td>Finance</td>
+      <td>May 19, 2016</td>
+      <td>2.3</td>
+      <td>2.2 and up</td>
+    </tr>
+    <tr>
+      <th>10819</th>
+      <td>Fanfic-FR</td>
+      <td>BOOKS_AND_REFERENCE</td>
+      <td>3.3</td>
+      <td>52</td>
+      <td>3.6M</td>
+      <td>5,000+</td>
+      <td>Free</td>
+      <td>0</td>
+      <td>Teen</td>
+      <td>Books &amp; Reference</td>
+      <td>August 5, 2017</td>
+      <td>0.3.4</td>
+      <td>4.1 and up</td>
+    </tr>
+    <tr>
+      <th>10820</th>
+      <td>Fr. Daoud Lamei</td>
+      <td>FAMILY</td>
+      <td>5.0</td>
+      <td>22</td>
+      <td>8.6M</td>
+      <td>1,000+</td>
+      <td>Free</td>
+      <td>0</td>
+      <td>Teen</td>
+      <td>Education</td>
+      <td>June 27, 2018</td>
+      <td>3.8.0</td>
+      <td>4.1 and up</td>
+    </tr>
+    <tr>
+      <th>10821</th>
+      <td>Poop FR</td>
+      <td>FAMILY</td>
+      <td>NaN</td>
+      <td>6</td>
+      <td>2.5M</td>
+      <td>50+</td>
+      <td>Free</td>
+      <td>0</td>
+      <td>Everyone</td>
+      <td>Entertainment</td>
+      <td>May 29, 2018</td>
+      <td>1.0</td>
+      <td>4.0.3 and up</td>
+    </tr>
+    <tr>
+      <th>10822</th>
+      <td>PLMGSS FR</td>
+      <td>PRODUCTIVITY</td>
+      <td>NaN</td>
+      <td>0</td>
+      <td>3.1M</td>
+      <td>10+</td>
+      <td>Free</td>
+      <td>0</td>
+      <td>Everyone</td>
+      <td>Productivity</td>
+      <td>December 1, 2017</td>
+      <td>1</td>
+      <td>4.4 and up</td>
+    </tr>
+    <tr>
+      <th>10823</th>
+      <td>List iptv FR</td>
+      <td>VIDEO_PLAYERS</td>
+      <td>NaN</td>
+      <td>1</td>
+      <td>2.9M</td>
+      <td>100+</td>
+      <td>Free</td>
+      <td>0</td>
+      <td>Everyone</td>
+      <td>Video Players &amp; Editors</td>
+      <td>April 22, 2018</td>
+      <td>1.0</td>
+      <td>4.0.3 and up</td>
+    </tr>
+    <tr>
+      <th>10824</th>
+      <td>Cardio-FR</td>
+      <td>MEDICAL</td>
+      <td>NaN</td>
+      <td>67</td>
+      <td>82M</td>
+      <td>10,000+</td>
+      <td>Free</td>
+      <td>0</td>
+      <td>Everyone</td>
+      <td>Medical</td>
+      <td>July 31, 2018</td>
+      <td>2.2.2</td>
+      <td>4.4 and up</td>
+    </tr>
+    <tr>
+      <th>10825</th>
+      <td>Naruto &amp; Boruto FR</td>
+      <td>SOCIAL</td>
+      <td>NaN</td>
+      <td>7</td>
+      <td>7.7M</td>
+      <td>100+</td>
+      <td>Free</td>
+      <td>0</td>
+      <td>Teen</td>
+      <td>Social</td>
+      <td>February 2, 2018</td>
+      <td>1.0</td>
+      <td>4.0 and up</td>
+    </tr>
+    <tr>
+      <th>10826</th>
+      <td>Frim: get new friends on local chat rooms</td>
+      <td>SOCIAL</td>
+      <td>4.0</td>
+      <td>88486</td>
+      <td>Varies with device</td>
+      <td>5,000,000+</td>
+      <td>Free</td>
+      <td>0</td>
+      <td>Mature 17+</td>
+      <td>Social</td>
+      <td>March 23, 2018</td>
+      <td>Varies with device</td>
+      <td>Varies with device</td>
+    </tr>
+    <tr>
+      <th>10827</th>
+      <td>Fr Agnel Ambarnath</td>
+      <td>FAMILY</td>
+      <td>4.2</td>
+      <td>117</td>
+      <td>13M</td>
+      <td>5,000+</td>
+      <td>Free</td>
+      <td>0</td>
+      <td>Everyone</td>
+      <td>Education</td>
+      <td>June 13, 2018</td>
+      <td>2.0.20</td>
+      <td>4.0.3 and up</td>
+    </tr>
+    <tr>
+      <th>10828</th>
+      <td>Manga-FR - Anime Vostfr</td>
+      <td>COMICS</td>
+      <td>3.4</td>
+      <td>291</td>
+      <td>13M</td>
+      <td>10,000+</td>
+      <td>Free</td>
+      <td>0</td>
+      <td>Everyone</td>
+      <td>Comics</td>
+      <td>May 15, 2017</td>
+      <td>2.0.1</td>
+      <td>4.0 and up</td>
+    </tr>
+    <tr>
+      <th>10829</th>
+      <td>Bulgarian French Dictionary Fr</td>
+      <td>BOOKS_AND_REFERENCE</td>
+      <td>4.6</td>
+      <td>603</td>
+      <td>7.4M</td>
+      <td>10,000+</td>
+      <td>Free</td>
+      <td>0</td>
+      <td>Everyone</td>
+      <td>Books &amp; Reference</td>
+      <td>June 19, 2016</td>
+      <td>2.96</td>
+      <td>4.1 and up</td>
+    </tr>
+    <tr>
+      <th>10830</th>
+      <td>News Minecraft.fr</td>
+      <td>NEWS_AND_MAGAZINES</td>
+      <td>3.8</td>
+      <td>881</td>
+      <td>2.3M</td>
+      <td>100,000+</td>
+      <td>Free</td>
+      <td>0</td>
+      <td>Everyone</td>
+      <td>News &amp; Magazines</td>
+      <td>January 20, 2014</td>
+      <td>1.5</td>
+      <td>1.6 and up</td>
+    </tr>
+    <tr>
+      <th>10831</th>
+      <td>payermonstationnement.fr</td>
+      <td>MAPS_AND_NAVIGATION</td>
+      <td>NaN</td>
+      <td>38</td>
+      <td>9.8M</td>
+      <td>5,000+</td>
+      <td>Free</td>
+      <td>0</td>
+      <td>Everyone</td>
+      <td>Maps &amp; Navigation</td>
+      <td>June 13, 2018</td>
+      <td>2.0.148.0</td>
+      <td>4.0 and up</td>
+    </tr>
+    <tr>
+      <th>10832</th>
+      <td>FR Tides</td>
+      <td>WEATHER</td>
+      <td>3.8</td>
+      <td>1195</td>
+      <td>582k</td>
+      <td>100,000+</td>
+      <td>Free</td>
+      <td>0</td>
+      <td>Everyone</td>
+      <td>Weather</td>
+      <td>February 16, 2014</td>
+      <td>6.0</td>
+      <td>2.1 and up</td>
+    </tr>
+    <tr>
+      <th>10833</th>
+      <td>Chemin (fr)</td>
+      <td>BOOKS_AND_REFERENCE</td>
+      <td>4.8</td>
+      <td>44</td>
+      <td>619k</td>
+      <td>1,000+</td>
+      <td>Free</td>
+      <td>0</td>
+      <td>Everyone</td>
+      <td>Books &amp; Reference</td>
+      <td>March 23, 2014</td>
+      <td>0.8</td>
+      <td>2.2 and up</td>
+    </tr>
+    <tr>
+      <th>10834</th>
+      <td>FR Calculator</td>
+      <td>FAMILY</td>
+      <td>4.0</td>
+      <td>7</td>
+      <td>2.6M</td>
+      <td>500+</td>
+      <td>Free</td>
+      <td>0</td>
+      <td>Everyone</td>
+      <td>Education</td>
+      <td>June 18, 2017</td>
+      <td>1.0.0</td>
+      <td>4.1 and up</td>
+    </tr>
+    <tr>
+      <th>10835</th>
+      <td>FR Forms</td>
+      <td>BUSINESS</td>
+      <td>NaN</td>
+      <td>0</td>
+      <td>9.6M</td>
+      <td>10+</td>
+      <td>Free</td>
+      <td>0</td>
+      <td>Everyone</td>
+      <td>Business</td>
+      <td>September 29, 2016</td>
+      <td>1.1.5</td>
+      <td>4.0 and up</td>
+    </tr>
+    <tr>
+      <th>10836</th>
+      <td>Sya9a Maroc - FR</td>
+      <td>FAMILY</td>
+      <td>4.5</td>
+      <td>38</td>
+      <td>53M</td>
+      <td>5,000+</td>
+      <td>Free</td>
+      <td>0</td>
+      <td>Everyone</td>
+      <td>Education</td>
+      <td>July 25, 2017</td>
+      <td>1.48</td>
+      <td>4.1 and up</td>
+    </tr>
+    <tr>
+      <th>10837</th>
+      <td>Fr. Mike Schmitz Audio Teachings</td>
+      <td>FAMILY</td>
+      <td>5.0</td>
+      <td>4</td>
+      <td>3.6M</td>
+      <td>100+</td>
+      <td>Free</td>
+      <td>0</td>
+      <td>Everyone</td>
+      <td>Education</td>
+      <td>July 6, 2018</td>
+      <td>1.0</td>
+      <td>4.1 and up</td>
+    </tr>
+    <tr>
+      <th>10838</th>
+      <td>Parkinson Exercices FR</td>
+      <td>MEDICAL</td>
+      <td>NaN</td>
+      <td>3</td>
+      <td>9.5M</td>
+      <td>1,000+</td>
+      <td>Free</td>
+      <td>0</td>
+      <td>Everyone</td>
+      <td>Medical</td>
+      <td>January 20, 2017</td>
+      <td>1.0</td>
+      <td>2.2 and up</td>
+    </tr>
+    <tr>
+      <th>10839</th>
+      <td>The SCP Foundation DB fr nn5n</td>
+      <td>BOOKS_AND_REFERENCE</td>
+      <td>4.5</td>
+      <td>114</td>
+      <td>Varies with device</td>
+      <td>1,000+</td>
+      <td>Free</td>
+      <td>0</td>
+      <td>Mature 17+</td>
+      <td>Books &amp; Reference</td>
+      <td>January 19, 2015</td>
+      <td>Varies with device</td>
+      <td>Varies with device</td>
+    </tr>
+    <tr>
+      <th>10840</th>
+      <td>iHoroscope - 2018 Daily Horoscope &amp; Astrology</td>
+      <td>LIFESTYLE</td>
+      <td>4.5</td>
+      <td>398307</td>
+      <td>19M</td>
+      <td>10,000,000+</td>
+      <td>Free</td>
+      <td>0</td>
+      <td>Everyone</td>
+      <td>Lifestyle</td>
+      <td>July 25, 2018</td>
+      <td>Varies with device</td>
+      <td>Varies with device</td>
+    </tr>
+  </tbody>
+</table>
+<p>10841 rows × 13 columns</p>
+</div>
+
+
+
+
+```python
+## Converting the String Installs to number by removing unwanted characters
+data.Installs = data['Installs'].map(lambda x: x.rstrip('+').replace(',','').replace('Free', '0'))
+data.Installs = data.Installs.astype(int)
+data.sample(5)
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
     }
-   ],
-   "source": [
-    "data = data[(~data.Rating.isnull())]\n",
-    "data = data[data.Rating < 5]\n",
-    "data.Rating.describe()"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 6,
-   "metadata": {},
-   "outputs": [
-    {
-     "name": "stdout",
-     "output_type": "stream",
-     "text": [
-      "<class 'pandas.core.frame.DataFrame'>\n",
-      "Int64Index: 9092 entries, 0 to 10840\n",
-      "Data columns (total 13 columns):\n",
-      "App               9092 non-null object\n",
-      "Category          9092 non-null object\n",
-      "Rating            9092 non-null float64\n",
-      "Reviews           9092 non-null object\n",
-      "Size              9092 non-null object\n",
-      "Installs          9092 non-null int64\n",
-      "Type              9092 non-null object\n",
-      "Price             9092 non-null object\n",
-      "Content Rating    9092 non-null object\n",
-      "Genres            9092 non-null object\n",
-      "Last Updated      9092 non-null object\n",
-      "Current Ver       9088 non-null object\n",
-      "Android Ver       9090 non-null object\n",
-      "dtypes: float64(1), int64(1), object(11)\n",
-      "memory usage: 994.4+ KB\n"
-     ]
+
+    .dataframe tbody tr th {
+        vertical-align: top;
     }
-   ],
-   "source": [
-    "data.info()"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 7,
-   "metadata": {},
-   "outputs": [
-    {
-     "data": {
-      "text/plain": [
-       "(9092, 13)"
-      ]
-     },
-     "execution_count": 7,
-     "metadata": {},
-     "output_type": "execute_result"
+
+    .dataframe thead th {
+        text-align: right;
     }
-   ],
-   "source": [
-    "data.drop_duplicates()\n",
-    "data.shape"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 8,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "data=data.drop([\"Last Updated\",\"Android Ver\",\"Current Ver\",\"Type\",\"Size\",],1)\n",
-    "\n"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 9,
-   "metadata": {},
-   "outputs": [
-    {
-     "name": "stdout",
-     "output_type": "stream",
-     "text": [
-      "<class 'pandas.core.frame.DataFrame'>\n",
-      "Int64Index: 9092 entries, 0 to 10840\n",
-      "Data columns (total 8 columns):\n",
-      "App               9092 non-null object\n",
-      "Category          9092 non-null object\n",
-      "Rating            9092 non-null float64\n",
-      "Reviews           9092 non-null object\n",
-      "Installs          9092 non-null int64\n",
-      "Price             9092 non-null object\n",
-      "Content Rating    9092 non-null object\n",
-      "Genres            9092 non-null object\n",
-      "dtypes: float64(1), int64(1), object(6)\n",
-      "memory usage: 639.3+ KB\n"
-     ]
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>App</th>
+      <th>Category</th>
+      <th>Rating</th>
+      <th>Reviews</th>
+      <th>Size</th>
+      <th>Installs</th>
+      <th>Type</th>
+      <th>Price</th>
+      <th>Content Rating</th>
+      <th>Genres</th>
+      <th>Last Updated</th>
+      <th>Current Ver</th>
+      <th>Android Ver</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>5559</th>
+      <td>Arcraft - AR Sandbox</td>
+      <td>GAME</td>
+      <td>3.8</td>
+      <td>469</td>
+      <td>80M</td>
+      <td>10000</td>
+      <td>Free</td>
+      <td>0</td>
+      <td>Everyone</td>
+      <td>Adventure</td>
+      <td>May 19, 2017</td>
+      <td>1.4</td>
+      <td>4.0 and up</td>
+    </tr>
+    <tr>
+      <th>3848</th>
+      <td>GPS Speedometer and Odometer</td>
+      <td>MAPS_AND_NAVIGATION</td>
+      <td>4.8</td>
+      <td>15865</td>
+      <td>3.3M</td>
+      <td>1000000</td>
+      <td>Free</td>
+      <td>0</td>
+      <td>Everyone</td>
+      <td>Maps &amp; Navigation</td>
+      <td>August 3, 2018</td>
+      <td>10.0</td>
+      <td>4.1 and up</td>
+    </tr>
+    <tr>
+      <th>7864</th>
+      <td>CT Abdomen</td>
+      <td>FAMILY</td>
+      <td>4.3</td>
+      <td>7</td>
+      <td>62M</td>
+      <td>1000</td>
+      <td>Free</td>
+      <td>0</td>
+      <td>Everyone</td>
+      <td>Education</td>
+      <td>February 21, 2017</td>
+      <td>1.0</td>
+      <td>4.4 and up</td>
+    </tr>
+    <tr>
+      <th>9290</th>
+      <td>EF Forms</td>
+      <td>BUSINESS</td>
+      <td>5.0</td>
+      <td>2</td>
+      <td>23M</td>
+      <td>50</td>
+      <td>Free</td>
+      <td>0</td>
+      <td>Everyone</td>
+      <td>Business</td>
+      <td>July 24, 2018</td>
+      <td>1.29</td>
+      <td>4.4 and up</td>
+    </tr>
+    <tr>
+      <th>8023</th>
+      <td>CW Nuclear</td>
+      <td>BOOKS_AND_REFERENCE</td>
+      <td>3.3</td>
+      <td>15</td>
+      <td>12M</td>
+      <td>1000</td>
+      <td>Free</td>
+      <td>0</td>
+      <td>Everyone</td>
+      <td>Books &amp; Reference</td>
+      <td>November 17, 2017</td>
+      <td>1.2</td>
+      <td>4.0 and up</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+#### The null values present in the data set are
+
+
+```python
+
+data.isnull().sum()
+```
+
+
+
+
+    App                  0
+    Category             0
+    Rating            1474
+    Reviews              0
+    Size                 0
+    Installs             0
+    Type                 1
+    Price                0
+    Content Rating       1
+    Genres               0
+    Last Updated         0
+    Current Ver          8
+    Android Ver          3
+    dtype: int64
+
+
+
+Since the count of ratings which are null are high and some of them greater than 5 lets remove them
+
+
+```python
+data = data[(~data.Rating.isnull())]
+data = data[data.Rating < 5]
+data.Rating.describe()
+```
+
+
+
+
+    count    9092.000000
+    mean        4.167400
+    std         0.503159
+    min         1.000000
+    25%         4.000000
+    50%         4.300000
+    75%         4.500000
+    max         4.900000
+    Name: Rating, dtype: float64
+
+
+
+
+```python
+data.info()
+```
+
+    <class 'pandas.core.frame.DataFrame'>
+    Int64Index: 9092 entries, 0 to 10840
+    Data columns (total 13 columns):
+    App               9092 non-null object
+    Category          9092 non-null object
+    Rating            9092 non-null float64
+    Reviews           9092 non-null object
+    Size              9092 non-null object
+    Installs          9092 non-null int64
+    Type              9092 non-null object
+    Price             9092 non-null object
+    Content Rating    9092 non-null object
+    Genres            9092 non-null object
+    Last Updated      9092 non-null object
+    Current Ver       9088 non-null object
+    Android Ver       9090 non-null object
+    dtypes: float64(1), int64(1), object(11)
+    memory usage: 994.4+ KB
+
+
+
+```python
+data.drop_duplicates()
+data.shape
+```
+
+
+
+
+    (9092, 13)
+
+
+
+
+```python
+data=data.drop(["Last Updated","Android Ver","Current Ver","Type","Size",],1)
+
+
+```
+
+
+```python
+
+data.info()
+```
+
+    <class 'pandas.core.frame.DataFrame'>
+    Int64Index: 9092 entries, 0 to 10840
+    Data columns (total 8 columns):
+    App               9092 non-null object
+    Category          9092 non-null object
+    Rating            9092 non-null float64
+    Reviews           9092 non-null object
+    Installs          9092 non-null int64
+    Price             9092 non-null object
+    Content Rating    9092 non-null object
+    Genres            9092 non-null object
+    dtypes: float64(1), int64(1), object(6)
+    memory usage: 639.3+ KB
+
+
+
+```python
+data.Rating.describe()
+```
+
+
+
+
+    count    9092.000000
+    mean        4.167400
+    std         0.503159
+    min         1.000000
+    25%         4.000000
+    50%         4.300000
+    75%         4.500000
+    max         4.900000
+    Name: Rating, dtype: float64
+
+
+
+
+```python
+x = sum(data.Rating.describe()[4:8])/4
+data.Rating = data.Rating.fillna(x)
+print("Dataset contains ",data.isna().any().sum()," Nan values.")
+data.Rating.describe()
+```
+
+    Dataset contains  0  Nan values.
+
+
+
+
+
+    count    9092.000000
+    mean        4.167400
+    std         0.503159
+    min         1.000000
+    25%         4.000000
+    50%         4.300000
+    75%         4.500000
+    max         4.900000
+    Name: Rating, dtype: float64
+
+
+
+
+```python
+data.shape
+```
+
+
+
+
+    (9092, 8)
+
+
+
+
+```python
+data.info()
+```
+
+    <class 'pandas.core.frame.DataFrame'>
+    Int64Index: 9092 entries, 0 to 10840
+    Data columns (total 8 columns):
+    App               9092 non-null object
+    Category          9092 non-null object
+    Rating            9092 non-null float64
+    Reviews           9092 non-null object
+    Installs          9092 non-null int64
+    Price             9092 non-null object
+    Content Rating    9092 non-null object
+    Genres            9092 non-null object
+    dtypes: float64(1), int64(1), object(6)
+    memory usage: 639.3+ KB
+
+
+
+```python
+data2 = pd.read_csv('googleplaystore_user_reviews.csv')
+data2.sample(10)
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
     }
-   ],
-   "source": [
-    "\n",
-    "data.info()"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 10,
-   "metadata": {},
-   "outputs": [
-    {
-     "data": {
-      "text/plain": [
-       "count    9092.000000\n",
-       "mean        4.167400\n",
-       "std         0.503159\n",
-       "min         1.000000\n",
-       "25%         4.000000\n",
-       "50%         4.300000\n",
-       "75%         4.500000\n",
-       "max         4.900000\n",
-       "Name: Rating, dtype: float64"
-      ]
-     },
-     "execution_count": 10,
-     "metadata": {},
-     "output_type": "execute_result"
+
+    .dataframe tbody tr th {
+        vertical-align: top;
     }
-   ],
-   "source": [
-    "data.Rating.describe()"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 11,
-   "metadata": {},
-   "outputs": [
-    {
-     "name": "stdout",
-     "output_type": "stream",
-     "text": [
-      "Dataset contains  0  Nan values.\n"
-     ]
-    },
-    {
-     "data": {
-      "text/plain": [
-       "count    9092.000000\n",
-       "mean        4.167400\n",
-       "std         0.503159\n",
-       "min         1.000000\n",
-       "25%         4.000000\n",
-       "50%         4.300000\n",
-       "75%         4.500000\n",
-       "max         4.900000\n",
-       "Name: Rating, dtype: float64"
-      ]
-     },
-     "execution_count": 11,
-     "metadata": {},
-     "output_type": "execute_result"
+
+    .dataframe thead th {
+        text-align: right;
     }
-   ],
-   "source": [
-    "x = sum(data.Rating.describe()[4:8])/4\n",
-    "data.Rating = data.Rating.fillna(x)\n",
-    "print(\"Dataset contains \",data.isna().any().sum(),\" Nan values.\")\n",
-    "data.Rating.describe()"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 12,
-   "metadata": {},
-   "outputs": [
-    {
-     "data": {
-      "text/plain": [
-       "(9092, 8)"
-      ]
-     },
-     "execution_count": 12,
-     "metadata": {},
-     "output_type": "execute_result"
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>App</th>
+      <th>Translated_Review</th>
+      <th>Sentiment</th>
+      <th>Sentiment_Polarity</th>
+      <th>Sentiment_Subjectivity</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>963</th>
+      <td>4 in a Row</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>24246</th>
+      <td>CarMax – Cars for Sale: Search Used Car Inventory</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>59081</th>
+      <td>HTC Gallery</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>64004</th>
+      <td>Hotels.com: Book Hotel Rooms &amp; Find Vacation D...</td>
+      <td>It displays incorrect prices I uninstall it. I...</td>
+      <td>Negative</td>
+      <td>-0.05</td>
+      <td>0.383333</td>
+    </tr>
+    <tr>
+      <th>21341</th>
+      <td>Calls &amp; Text by Mo+</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>36751</th>
+      <td>Draw.ly - Color by Number Pixel Art Coloring</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>39624</th>
+      <td>Elmo Calls by Sesame Street</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>13364</th>
+      <td>Beautiful Design Birthday Cake</td>
+      <td>Please install showing pic save pics</td>
+      <td>Neutral</td>
+      <td>0.00</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>46713</th>
+      <td>Flashlight &amp; LED Torch</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>38960</th>
+      <td>Easy Voice Recorder</td>
+      <td>Nice good helps alot</td>
+      <td>Positive</td>
+      <td>0.65</td>
+      <td>0.800000</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+
+```python
+data2.info()
+```
+
+    <class 'pandas.core.frame.DataFrame'>
+    RangeIndex: 64295 entries, 0 to 64294
+    Data columns (total 5 columns):
+    App                       64295 non-null object
+    Translated_Review         37427 non-null object
+    Sentiment                 37432 non-null object
+    Sentiment_Polarity        37432 non-null float64
+    Sentiment_Subjectivity    37432 non-null float64
+    dtypes: float64(2), object(3)
+    memory usage: 2.5+ MB
+
+
+
+```python
+data2.dropna(thresh=2, inplace=True)
+data2.reset_index(drop=True, inplace=True)
+data2.sample(10)
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
     }
-   ],
-   "source": [
-    "data.shape"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 13,
-   "metadata": {},
-   "outputs": [
-    {
-     "name": "stdout",
-     "output_type": "stream",
-     "text": [
-      "<class 'pandas.core.frame.DataFrame'>\n",
-      "Int64Index: 9092 entries, 0 to 10840\n",
-      "Data columns (total 8 columns):\n",
-      "App               9092 non-null object\n",
-      "Category          9092 non-null object\n",
-      "Rating            9092 non-null float64\n",
-      "Reviews           9092 non-null object\n",
-      "Installs          9092 non-null int64\n",
-      "Price             9092 non-null object\n",
-      "Content Rating    9092 non-null object\n",
-      "Genres            9092 non-null object\n",
-      "dtypes: float64(1), int64(1), object(6)\n",
-      "memory usage: 639.3+ KB\n"
-     ]
+
+    .dataframe tbody tr th {
+        vertical-align: top;
     }
-   ],
-   "source": [
-    "data.info()"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 14,
-   "metadata": {},
-   "outputs": [
-    {
-     "data": {
-      "text/html": [
-       "<div>\n",
-       "<style scoped>\n",
-       "    .dataframe tbody tr th:only-of-type {\n",
-       "        vertical-align: middle;\n",
-       "    }\n",
-       "\n",
-       "    .dataframe tbody tr th {\n",
-       "        vertical-align: top;\n",
-       "    }\n",
-       "\n",
-       "    .dataframe thead th {\n",
-       "        text-align: right;\n",
-       "    }\n",
-       "</style>\n",
-       "<table border=\"1\" class=\"dataframe\">\n",
-       "  <thead>\n",
-       "    <tr style=\"text-align: right;\">\n",
-       "      <th></th>\n",
-       "      <th>App</th>\n",
-       "      <th>Translated_Review</th>\n",
-       "      <th>Sentiment</th>\n",
-       "      <th>Sentiment_Polarity</th>\n",
-       "      <th>Sentiment_Subjectivity</th>\n",
-       "    </tr>\n",
-       "  </thead>\n",
-       "  <tbody>\n",
-       "    <tr>\n",
-       "      <th>37592</th>\n",
-       "      <td>Duolingo: Learn Languages Free</td>\n",
-       "      <td>I speak Finnish starting lose language wanted ...</td>\n",
-       "      <td>Negative</td>\n",
-       "      <td>-0.116667</td>\n",
-       "      <td>0.416667</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>44288</th>\n",
-       "      <td>Farm Fruit Pop: Party Time</td>\n",
-       "      <td>NaN</td>\n",
-       "      <td>NaN</td>\n",
-       "      <td>NaN</td>\n",
-       "      <td>NaN</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>23585</th>\n",
-       "      <td>Candy Crush Saga</td>\n",
-       "      <td>Prize wheel NEVER landed jackpot since I began...</td>\n",
-       "      <td>Neutral</td>\n",
-       "      <td>0.000000</td>\n",
-       "      <td>0.479167</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>43475</th>\n",
-       "      <td>Fallout Shelter</td>\n",
-       "      <td>I dumped $ game previous vault. I toggled clou...</td>\n",
-       "      <td>Negative</td>\n",
-       "      <td>-0.144413</td>\n",
-       "      <td>0.396402</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>6094</th>\n",
-       "      <td>Alto's Adventure</td>\n",
-       "      <td>Great game! Keeps focussed, demand much attent...</td>\n",
-       "      <td>Positive</td>\n",
-       "      <td>0.081061</td>\n",
-       "      <td>0.392424</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>392</th>\n",
-       "      <td>1LINE – One Line with One Touch</td>\n",
-       "      <td>Excellent</td>\n",
-       "      <td>Positive</td>\n",
-       "      <td>1.000000</td>\n",
-       "      <td>1.000000</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>1986</th>\n",
-       "      <td>A Manual of Acupuncture</td>\n",
-       "      <td>NaN</td>\n",
-       "      <td>NaN</td>\n",
-       "      <td>NaN</td>\n",
-       "      <td>NaN</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>45397</th>\n",
-       "      <td>File Browser by Astro (File Manager)</td>\n",
-       "      <td>NaN</td>\n",
-       "      <td>NaN</td>\n",
-       "      <td>NaN</td>\n",
-       "      <td>NaN</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>58007</th>\n",
-       "      <td>Gyft - Mobile Gift Card Wallet</td>\n",
-       "      <td>Buy gyft card put security WITHOUT reason. I'v...</td>\n",
-       "      <td>Negative</td>\n",
-       "      <td>-0.223958</td>\n",
-       "      <td>0.601042</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>5146</th>\n",
-       "      <td>Airway Ex - Intubate. Anesthetize. Train.</td>\n",
-       "      <td>Controls need sensitive...</td>\n",
-       "      <td>Positive</td>\n",
-       "      <td>0.100000</td>\n",
-       "      <td>0.900000</td>\n",
-       "    </tr>\n",
-       "  </tbody>\n",
-       "</table>\n",
-       "</div>"
-      ],
-      "text/plain": [
-       "                                             App  \\\n",
-       "37592             Duolingo: Learn Languages Free   \n",
-       "44288                 Farm Fruit Pop: Party Time   \n",
-       "23585                           Candy Crush Saga   \n",
-       "43475                            Fallout Shelter   \n",
-       "6094                            Alto's Adventure   \n",
-       "392              1LINE – One Line with One Touch   \n",
-       "1986                     A Manual of Acupuncture   \n",
-       "45397       File Browser by Astro (File Manager)   \n",
-       "58007             Gyft - Mobile Gift Card Wallet   \n",
-       "5146   Airway Ex - Intubate. Anesthetize. Train.   \n",
-       "\n",
-       "                                       Translated_Review Sentiment  \\\n",
-       "37592  I speak Finnish starting lose language wanted ...  Negative   \n",
-       "44288                                                NaN       NaN   \n",
-       "23585  Prize wheel NEVER landed jackpot since I began...   Neutral   \n",
-       "43475  I dumped $ game previous vault. I toggled clou...  Negative   \n",
-       "6094   Great game! Keeps focussed, demand much attent...  Positive   \n",
-       "392                                            Excellent  Positive   \n",
-       "1986                                                 NaN       NaN   \n",
-       "45397                                                NaN       NaN   \n",
-       "58007  Buy gyft card put security WITHOUT reason. I'v...  Negative   \n",
-       "5146                          Controls need sensitive...  Positive   \n",
-       "\n",
-       "       Sentiment_Polarity  Sentiment_Subjectivity  \n",
-       "37592           -0.116667                0.416667  \n",
-       "44288                 NaN                     NaN  \n",
-       "23585            0.000000                0.479167  \n",
-       "43475           -0.144413                0.396402  \n",
-       "6094             0.081061                0.392424  \n",
-       "392              1.000000                1.000000  \n",
-       "1986                  NaN                     NaN  \n",
-       "45397                 NaN                     NaN  \n",
-       "58007           -0.223958                0.601042  \n",
-       "5146             0.100000                0.900000  "
-      ]
-     },
-     "execution_count": 14,
-     "metadata": {},
-     "output_type": "execute_result"
+
+    .dataframe thead th {
+        text-align: right;
     }
-   ],
-   "source": [
-    "data2 = pd.read_csv('googleplaystore_user_reviews.csv')\n",
-    "data2.sample(10)"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 15,
-   "metadata": {},
-   "outputs": [
-    {
-     "name": "stdout",
-     "output_type": "stream",
-     "text": [
-      "<class 'pandas.core.frame.DataFrame'>\n",
-      "RangeIndex: 64295 entries, 0 to 64294\n",
-      "Data columns (total 5 columns):\n",
-      "App                       64295 non-null object\n",
-      "Translated_Review         37427 non-null object\n",
-      "Sentiment                 37432 non-null object\n",
-      "Sentiment_Polarity        37432 non-null float64\n",
-      "Sentiment_Subjectivity    37432 non-null float64\n",
-      "dtypes: float64(2), object(3)\n",
-      "memory usage: 2.5+ MB\n"
-     ]
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>App</th>
+      <th>Translated_Review</th>
+      <th>Sentiment</th>
+      <th>Sentiment_Polarity</th>
+      <th>Sentiment_Subjectivity</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>26147</th>
+      <td>FastMeet: Chat, Dating, Love</td>
+      <td>Sexy</td>
+      <td>Positive</td>
+      <td>0.500000</td>
+      <td>1.000000</td>
+    </tr>
+    <tr>
+      <th>18414</th>
+      <td>Cut the Rope 2</td>
+      <td>The best funny game</td>
+      <td>Positive</td>
+      <td>0.283333</td>
+      <td>0.566667</td>
+    </tr>
+    <tr>
+      <th>16164</th>
+      <td>Clash of Clans</td>
+      <td>Everything wonderful got issue account. I prom...</td>
+      <td>Positive</td>
+      <td>0.633333</td>
+      <td>0.800000</td>
+    </tr>
+    <tr>
+      <th>18096</th>
+      <td>Crossy Road</td>
+      <td>I LOVE THIS GAME</td>
+      <td>Positive</td>
+      <td>0.050000</td>
+      <td>0.500000</td>
+    </tr>
+    <tr>
+      <th>13786</th>
+      <td>Calorie Counter - MyFitnessPal</td>
+      <td>Game changer</td>
+      <td>Negative</td>
+      <td>-0.400000</td>
+      <td>0.400000</td>
+    </tr>
+    <tr>
+      <th>37072</th>
+      <td>Hot Wheels: Race Off</td>
+      <td>Make set 7 classical cars like Chevrolet belai...</td>
+      <td>Positive</td>
+      <td>0.262500</td>
+      <td>0.487500</td>
+    </tr>
+    <tr>
+      <th>4986</th>
+      <td>Anime Manga Coloring Book</td>
+      <td>I like I wish coloring pages</td>
+      <td>Neutral</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>10817</th>
+      <td>Bowmasters</td>
+      <td>Rated still can't get chests. And freezes aske...</td>
+      <td>Neutral</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>4302</th>
+      <td>Amino: Communities and Chats</td>
+      <td>I like lot, recently many bugs. Notifications ...</td>
+      <td>Positive</td>
+      <td>0.028571</td>
+      <td>0.485714</td>
+    </tr>
+    <tr>
+      <th>17165</th>
+      <td>Content Transfer</td>
+      <td>This easiest phone upgrade I ever through. Tha...</td>
+      <td>Neutral</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+
+```python
+data3=pd.merge(data, data2, on='App')
+data3.sample(10)
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
     }
-   ],
-   "source": [
-    "data2.info()"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 16,
-   "metadata": {},
-   "outputs": [
-    {
-     "data": {
-      "text/html": [
-       "<div>\n",
-       "<style scoped>\n",
-       "    .dataframe tbody tr th:only-of-type {\n",
-       "        vertical-align: middle;\n",
-       "    }\n",
-       "\n",
-       "    .dataframe tbody tr th {\n",
-       "        vertical-align: top;\n",
-       "    }\n",
-       "\n",
-       "    .dataframe thead th {\n",
-       "        text-align: right;\n",
-       "    }\n",
-       "</style>\n",
-       "<table border=\"1\" class=\"dataframe\">\n",
-       "  <thead>\n",
-       "    <tr style=\"text-align: right;\">\n",
-       "      <th></th>\n",
-       "      <th>App</th>\n",
-       "      <th>Translated_Review</th>\n",
-       "      <th>Sentiment</th>\n",
-       "      <th>Sentiment_Polarity</th>\n",
-       "      <th>Sentiment_Subjectivity</th>\n",
-       "    </tr>\n",
-       "  </thead>\n",
-       "  <tbody>\n",
-       "    <tr>\n",
-       "      <th>27847</th>\n",
-       "      <td>Food Network</td>\n",
-       "      <td>This worst. Every time episode finishes I disc...</td>\n",
-       "      <td>Negative</td>\n",
-       "      <td>-0.500000</td>\n",
-       "      <td>0.500000</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>6266</th>\n",
-       "      <td>Azar</td>\n",
-       "      <td>Top</td>\n",
-       "      <td>Positive</td>\n",
-       "      <td>0.500000</td>\n",
-       "      <td>0.500000</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>23250</th>\n",
-       "      <td>Equestria Girls</td>\n",
-       "      <td>This game trap, updates, fixes No good stuff. ...</td>\n",
-       "      <td>Negative</td>\n",
-       "      <td>-0.375000</td>\n",
-       "      <td>0.500000</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>30300</th>\n",
-       "      <td>Galaxy Attack: Alien Shooter</td>\n",
-       "      <td>A little hard understand get going. But great ...</td>\n",
-       "      <td>Positive</td>\n",
-       "      <td>0.015417</td>\n",
-       "      <td>0.478333</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>5711</th>\n",
-       "      <td>Arrow.io</td>\n",
-       "      <td>Really good game love it!</td>\n",
-       "      <td>Positive</td>\n",
-       "      <td>0.308333</td>\n",
-       "      <td>0.533333</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>36605</th>\n",
-       "      <td>Homes.com 🏠 For Sale, Rent</td>\n",
-       "      <td>Listing outdated. Unable edit payment calculat...</td>\n",
-       "      <td>Negative</td>\n",
-       "      <td>-0.244444</td>\n",
-       "      <td>0.488889</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>5572</th>\n",
-       "      <td>Aprender inglés con Wlingua</td>\n",
-       "      <td>A very good application, that's just the words...</td>\n",
-       "      <td>Positive</td>\n",
-       "      <td>0.310833</td>\n",
-       "      <td>0.492619</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>12784</th>\n",
-       "      <td>CMB Free Dating App</td>\n",
-       "      <td>Quality matches, far I've great matches intere...</td>\n",
-       "      <td>Positive</td>\n",
-       "      <td>0.466667</td>\n",
-       "      <td>0.750000</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>27123</th>\n",
-       "      <td>Flight &amp; Hotel Booking App - ixigo</td>\n",
-       "      <td>Very Good</td>\n",
-       "      <td>Positive</td>\n",
-       "      <td>0.910000</td>\n",
-       "      <td>0.780000</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>28441</th>\n",
-       "      <td>Free Dating &amp; Flirt Chat - Choice of Love</td>\n",
-       "      <td>This great</td>\n",
-       "      <td>Positive</td>\n",
-       "      <td>0.800000</td>\n",
-       "      <td>0.750000</td>\n",
-       "    </tr>\n",
-       "  </tbody>\n",
-       "</table>\n",
-       "</div>"
-      ],
-      "text/plain": [
-       "                                             App  \\\n",
-       "27847                               Food Network   \n",
-       "6266                                        Azar   \n",
-       "23250                            Equestria Girls   \n",
-       "30300               Galaxy Attack: Alien Shooter   \n",
-       "5711                                    Arrow.io   \n",
-       "36605                 Homes.com 🏠 For Sale, Rent   \n",
-       "5572                 Aprender inglés con Wlingua   \n",
-       "12784                        CMB Free Dating App   \n",
-       "27123         Flight & Hotel Booking App - ixigo   \n",
-       "28441  Free Dating & Flirt Chat - Choice of Love   \n",
-       "\n",
-       "                                       Translated_Review Sentiment  \\\n",
-       "27847  This worst. Every time episode finishes I disc...  Negative   \n",
-       "6266                                                 Top  Positive   \n",
-       "23250  This game trap, updates, fixes No good stuff. ...  Negative   \n",
-       "30300  A little hard understand get going. But great ...  Positive   \n",
-       "5711                           Really good game love it!  Positive   \n",
-       "36605  Listing outdated. Unable edit payment calculat...  Negative   \n",
-       "5572   A very good application, that's just the words...  Positive   \n",
-       "12784  Quality matches, far I've great matches intere...  Positive   \n",
-       "27123                                          Very Good  Positive   \n",
-       "28441                                         This great  Positive   \n",
-       "\n",
-       "       Sentiment_Polarity  Sentiment_Subjectivity  \n",
-       "27847           -0.500000                0.500000  \n",
-       "6266             0.500000                0.500000  \n",
-       "23250           -0.375000                0.500000  \n",
-       "30300            0.015417                0.478333  \n",
-       "5711             0.308333                0.533333  \n",
-       "36605           -0.244444                0.488889  \n",
-       "5572             0.310833                0.492619  \n",
-       "12784            0.466667                0.750000  \n",
-       "27123            0.910000                0.780000  \n",
-       "28441            0.800000                0.750000  "
-      ]
-     },
-     "execution_count": 16,
-     "metadata": {},
-     "output_type": "execute_result"
+
+    .dataframe tbody tr th {
+        vertical-align: top;
     }
-   ],
-   "source": [
-    "data2.dropna(thresh=2, inplace=True)\n",
-    "data2.reset_index(drop=True, inplace=True)\n",
-    "data2.sample(10)"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 17,
-   "metadata": {},
-   "outputs": [
-    {
-     "data": {
-      "text/html": [
-       "<div>\n",
-       "<style scoped>\n",
-       "    .dataframe tbody tr th:only-of-type {\n",
-       "        vertical-align: middle;\n",
-       "    }\n",
-       "\n",
-       "    .dataframe tbody tr th {\n",
-       "        vertical-align: top;\n",
-       "    }\n",
-       "\n",
-       "    .dataframe thead th {\n",
-       "        text-align: right;\n",
-       "    }\n",
-       "</style>\n",
-       "<table border=\"1\" class=\"dataframe\">\n",
-       "  <thead>\n",
-       "    <tr style=\"text-align: right;\">\n",
-       "      <th></th>\n",
-       "      <th>App</th>\n",
-       "      <th>Category</th>\n",
-       "      <th>Rating</th>\n",
-       "      <th>Reviews</th>\n",
-       "      <th>Installs</th>\n",
-       "      <th>Price</th>\n",
-       "      <th>Content Rating</th>\n",
-       "      <th>Genres</th>\n",
-       "      <th>Translated_Review</th>\n",
-       "      <th>Sentiment</th>\n",
-       "      <th>Sentiment_Polarity</th>\n",
-       "      <th>Sentiment_Subjectivity</th>\n",
-       "    </tr>\n",
-       "  </thead>\n",
-       "  <tbody>\n",
-       "    <tr>\n",
-       "      <th>32863</th>\n",
-       "      <td>Angry Birds Classic</td>\n",
-       "      <td>GAME</td>\n",
-       "      <td>4.4</td>\n",
-       "      <td>5566805</td>\n",
-       "      <td>100000000</td>\n",
-       "      <td>0</td>\n",
-       "      <td>Everyone</td>\n",
-       "      <td>Arcade</td>\n",
-       "      <td>Used love game, never problem even started usi...</td>\n",
-       "      <td>Negative</td>\n",
-       "      <td>-0.131250</td>\n",
-       "      <td>0.412500</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>40149</th>\n",
-       "      <td>Farm Fruit Pop: Party Time</td>\n",
-       "      <td>GAME</td>\n",
-       "      <td>4.4</td>\n",
-       "      <td>9305</td>\n",
-       "      <td>1000000</td>\n",
-       "      <td>0</td>\n",
-       "      <td>Everyone</td>\n",
-       "      <td>Casual</td>\n",
-       "      <td>good game</td>\n",
-       "      <td>Positive</td>\n",
-       "      <td>0.150000</td>\n",
-       "      <td>0.500000</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>49003</th>\n",
-       "      <td>Banfield Pet Health Tracker</td>\n",
-       "      <td>MEDICAL</td>\n",
-       "      <td>4.2</td>\n",
-       "      <td>1747</td>\n",
-       "      <td>100000</td>\n",
-       "      <td>0</td>\n",
-       "      <td>Everyone</td>\n",
-       "      <td>Medical</td>\n",
-       "      <td>Very convenient. I like I every thing finger t...</td>\n",
-       "      <td>Positive</td>\n",
-       "      <td>0.200000</td>\n",
-       "      <td>0.300000</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>68365</th>\n",
-       "      <td>HD Video Player</td>\n",
-       "      <td>VIDEO_PLAYERS</td>\n",
-       "      <td>4.3</td>\n",
-       "      <td>1551</td>\n",
-       "      <td>1000000</td>\n",
-       "      <td>0</td>\n",
-       "      <td>Everyone</td>\n",
-       "      <td>Video Players &amp; Editors</td>\n",
-       "      <td>Arj</td>\n",
-       "      <td>Neutral</td>\n",
-       "      <td>0.000000</td>\n",
-       "      <td>0.000000</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>14562</th>\n",
-       "      <td>All Events in City</td>\n",
-       "      <td>EVENTS</td>\n",
-       "      <td>4.0</td>\n",
-       "      <td>3782</td>\n",
-       "      <td>100000</td>\n",
-       "      <td>0</td>\n",
-       "      <td>Everyone</td>\n",
-       "      <td>Events</td>\n",
-       "      <td>Very useful responsive developers. When seriou...</td>\n",
-       "      <td>Positive</td>\n",
-       "      <td>0.151111</td>\n",
-       "      <td>0.555556</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>45736</th>\n",
-       "      <td>Farming Simulator 14</td>\n",
-       "      <td>FAMILY</td>\n",
-       "      <td>4.5</td>\n",
-       "      <td>530854</td>\n",
-       "      <td>10000000</td>\n",
-       "      <td>0</td>\n",
-       "      <td>Everyone</td>\n",
-       "      <td>Simulation;Action &amp; Adventure</td>\n",
-       "      <td>I love game, purchase super cheap. $10 best ev...</td>\n",
-       "      <td>Positive</td>\n",
-       "      <td>0.326190</td>\n",
-       "      <td>0.527381</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>43400</th>\n",
-       "      <td>DEAD TARGET: FPS Zombie Apocalypse Survival Games</td>\n",
-       "      <td>GAME</td>\n",
-       "      <td>4.5</td>\n",
-       "      <td>1468638</td>\n",
-       "      <td>50000000</td>\n",
-       "      <td>0</td>\n",
-       "      <td>Mature 17+</td>\n",
-       "      <td>Action</td>\n",
-       "      <td>Very interesting game.</td>\n",
-       "      <td>Positive</td>\n",
-       "      <td>0.125000</td>\n",
-       "      <td>0.525000</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>37581</th>\n",
-       "      <td>Garena Free Fire</td>\n",
-       "      <td>GAME</td>\n",
-       "      <td>4.5</td>\n",
-       "      <td>5476569</td>\n",
-       "      <td>100000000</td>\n",
-       "      <td>0</td>\n",
-       "      <td>Teen</td>\n",
-       "      <td>Action</td>\n",
-       "      <td>After small update game play squad mode friend...</td>\n",
-       "      <td>Negative</td>\n",
-       "      <td>-0.325000</td>\n",
-       "      <td>0.350000</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>2142</th>\n",
-       "      <td>Google My Business</td>\n",
-       "      <td>BUSINESS</td>\n",
-       "      <td>4.4</td>\n",
-       "      <td>70991</td>\n",
-       "      <td>5000000</td>\n",
-       "      <td>0</td>\n",
-       "      <td>Everyone</td>\n",
-       "      <td>Business</td>\n",
-       "      <td>Eight</td>\n",
-       "      <td>Neutral</td>\n",
-       "      <td>0.000000</td>\n",
-       "      <td>0.000000</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>64695</th>\n",
-       "      <td>GO Keyboard - Emoticon keyboard, Free Theme, GIF</td>\n",
-       "      <td>PERSONALIZATION</td>\n",
-       "      <td>4.4</td>\n",
-       "      <td>2591941</td>\n",
-       "      <td>100000000</td>\n",
-       "      <td>0</td>\n",
-       "      <td>Everyone</td>\n",
-       "      <td>Personalization</td>\n",
-       "      <td>Gouwood you</td>\n",
-       "      <td>Neutral</td>\n",
-       "      <td>0.000000</td>\n",
-       "      <td>0.000000</td>\n",
-       "    </tr>\n",
-       "  </tbody>\n",
-       "</table>\n",
-       "</div>"
-      ],
-      "text/plain": [
-       "                                                     App         Category  \\\n",
-       "32863                                Angry Birds Classic             GAME   \n",
-       "40149                         Farm Fruit Pop: Party Time             GAME   \n",
-       "49003                        Banfield Pet Health Tracker          MEDICAL   \n",
-       "68365                                    HD Video Player    VIDEO_PLAYERS   \n",
-       "14562                                 All Events in City           EVENTS   \n",
-       "45736                               Farming Simulator 14           FAMILY   \n",
-       "43400  DEAD TARGET: FPS Zombie Apocalypse Survival Games             GAME   \n",
-       "37581                                   Garena Free Fire             GAME   \n",
-       "2142                                  Google My Business         BUSINESS   \n",
-       "64695   GO Keyboard - Emoticon keyboard, Free Theme, GIF  PERSONALIZATION   \n",
-       "\n",
-       "       Rating  Reviews   Installs Price Content Rating  \\\n",
-       "32863     4.4  5566805  100000000     0       Everyone   \n",
-       "40149     4.4     9305    1000000     0       Everyone   \n",
-       "49003     4.2     1747     100000     0       Everyone   \n",
-       "68365     4.3     1551    1000000     0       Everyone   \n",
-       "14562     4.0     3782     100000     0       Everyone   \n",
-       "45736     4.5   530854   10000000     0       Everyone   \n",
-       "43400     4.5  1468638   50000000     0     Mature 17+   \n",
-       "37581     4.5  5476569  100000000     0           Teen   \n",
-       "2142      4.4    70991    5000000     0       Everyone   \n",
-       "64695     4.4  2591941  100000000     0       Everyone   \n",
-       "\n",
-       "                              Genres  \\\n",
-       "32863                         Arcade   \n",
-       "40149                         Casual   \n",
-       "49003                        Medical   \n",
-       "68365        Video Players & Editors   \n",
-       "14562                         Events   \n",
-       "45736  Simulation;Action & Adventure   \n",
-       "43400                         Action   \n",
-       "37581                         Action   \n",
-       "2142                        Business   \n",
-       "64695                Personalization   \n",
-       "\n",
-       "                                       Translated_Review Sentiment  \\\n",
-       "32863  Used love game, never problem even started usi...  Negative   \n",
-       "40149                                          good game  Positive   \n",
-       "49003  Very convenient. I like I every thing finger t...  Positive   \n",
-       "68365                                                Arj   Neutral   \n",
-       "14562  Very useful responsive developers. When seriou...  Positive   \n",
-       "45736  I love game, purchase super cheap. $10 best ev...  Positive   \n",
-       "43400                             Very interesting game.  Positive   \n",
-       "37581  After small update game play squad mode friend...  Negative   \n",
-       "2142                                               Eight   Neutral   \n",
-       "64695                                        Gouwood you   Neutral   \n",
-       "\n",
-       "       Sentiment_Polarity  Sentiment_Subjectivity  \n",
-       "32863           -0.131250                0.412500  \n",
-       "40149            0.150000                0.500000  \n",
-       "49003            0.200000                0.300000  \n",
-       "68365            0.000000                0.000000  \n",
-       "14562            0.151111                0.555556  \n",
-       "45736            0.326190                0.527381  \n",
-       "43400            0.125000                0.525000  \n",
-       "37581           -0.325000                0.350000  \n",
-       "2142             0.000000                0.000000  \n",
-       "64695            0.000000                0.000000  "
-      ]
-     },
-     "execution_count": 17,
-     "metadata": {},
-     "output_type": "execute_result"
+
+    .dataframe thead th {
+        text-align: right;
     }
-   ],
-   "source": [
-    "data3=pd.merge(data, data2, on='App')\n",
-    "data3.sample(10)"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 18,
-   "metadata": {
-    "scrolled": true
-   },
-   "outputs": [
-    {
-     "data": {
-      "text/plain": [
-       "259"
-      ]
-     },
-     "execution_count": 18,
-     "metadata": {},
-     "output_type": "execute_result"
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>App</th>
+      <th>Category</th>
+      <th>Rating</th>
+      <th>Reviews</th>
+      <th>Installs</th>
+      <th>Price</th>
+      <th>Content Rating</th>
+      <th>Genres</th>
+      <th>Translated_Review</th>
+      <th>Sentiment</th>
+      <th>Sentiment_Polarity</th>
+      <th>Sentiment_Subjectivity</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>42822</th>
+      <td>Dude Perfect 2</td>
+      <td>GAME</td>
+      <td>4.5</td>
+      <td>401648</td>
+      <td>10000000</td>
+      <td>0</td>
+      <td>Everyone</td>
+      <td>Action</td>
+      <td>It great game sometimes I watch dude perfect b...</td>
+      <td>Positive</td>
+      <td>0.581250</td>
+      <td>0.562500</td>
+    </tr>
+    <tr>
+      <th>59572</th>
+      <td>Booking.com Travel Deals</td>
+      <td>TRAVEL_AND_LOCAL</td>
+      <td>4.7</td>
+      <td>1830387</td>
+      <td>100000000</td>
+      <td>0</td>
+      <td>Everyone</td>
+      <td>Travel &amp; Local</td>
+      <td>Gud easy I travel regularly relatives old Thanks</td>
+      <td>Positive</td>
+      <td>0.183333</td>
+      <td>0.327564</td>
+    </tr>
+    <tr>
+      <th>31506</th>
+      <td>8 Ball Pool</td>
+      <td>GAME</td>
+      <td>4.5</td>
+      <td>14200550</td>
+      <td>100000000</td>
+      <td>0</td>
+      <td>Everyone</td>
+      <td>Sports</td>
+      <td>Games alright, bit sketchy either opponent bad...</td>
+      <td>Negative</td>
+      <td>-0.303571</td>
+      <td>0.650595</td>
+    </tr>
+    <tr>
+      <th>68747</th>
+      <td>Fox News – Breaking News, Live Video &amp; News Al...</td>
+      <td>NEWS_AND_MAGAZINES</td>
+      <td>4.5</td>
+      <td>249919</td>
+      <td>10000000</td>
+      <td>0</td>
+      <td>Everyone 10+</td>
+      <td>News &amp; Magazines</td>
+      <td>Cannot watch live stream anymore UPDATE: Conta...</td>
+      <td>Positive</td>
+      <td>0.197273</td>
+      <td>0.350000</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>Coloring book moana</td>
+      <td>ART_AND_DESIGN</td>
+      <td>3.9</td>
+      <td>967</td>
+      <td>500000</td>
+      <td>0</td>
+      <td>Everyone</td>
+      <td>Art &amp; Design;Pretend Play</td>
+      <td>Love</td>
+      <td>Positive</td>
+      <td>0.500000</td>
+      <td>0.600000</td>
+    </tr>
+    <tr>
+      <th>33404</th>
+      <td>Angry Birds Classic</td>
+      <td>GAME</td>
+      <td>4.4</td>
+      <td>5566908</td>
+      <td>100000000</td>
+      <td>0</td>
+      <td>Everyone</td>
+      <td>Arcade</td>
+      <td>Love game every 1 min game play watch 2 min ad...</td>
+      <td>Negative</td>
+      <td>-0.128571</td>
+      <td>0.428571</td>
+    </tr>
+    <tr>
+      <th>18960</th>
+      <td>Calorie Counter - MyFitnessPal</td>
+      <td>HEALTH_AND_FITNESS</td>
+      <td>4.6</td>
+      <td>1873523</td>
+      <td>50000000</td>
+      <td>0</td>
+      <td>Everyone</td>
+      <td>Health &amp; Fitness</td>
+      <td>It keeps saying cannot connect server. I tried...</td>
+      <td>Neutral</td>
+      <td>0.000000</td>
+      <td>0.066667</td>
+    </tr>
+    <tr>
+      <th>27813</th>
+      <td>Helix Jump</td>
+      <td>GAME</td>
+      <td>4.2</td>
+      <td>1497361</td>
+      <td>100000000</td>
+      <td>0</td>
+      <td>Everyone</td>
+      <td>Action</td>
+      <td>Excellent game satisfying physics easy learn h...</td>
+      <td>Positive</td>
+      <td>0.294792</td>
+      <td>0.621875</td>
+    </tr>
+    <tr>
+      <th>60593</th>
+      <td>American Airlines</td>
+      <td>TRAVEL_AND_LOCAL</td>
+      <td>3.7</td>
+      <td>16980</td>
+      <td>5000000</td>
+      <td>0</td>
+      <td>Everyone</td>
+      <td>Travel &amp; Local</td>
+      <td>After update boarding pass update like gate te...</td>
+      <td>Neutral</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>14428</th>
+      <td>Colorfy: Coloring Book for Adults - Free</td>
+      <td>ENTERTAINMENT</td>
+      <td>4.5</td>
+      <td>787177</td>
+      <td>10000000</td>
+      <td>0</td>
+      <td>Everyone</td>
+      <td>Entertainment</td>
+      <td>Lame waste time!!!! You purchase color anything.</td>
+      <td>Negative</td>
+      <td>-0.494141</td>
+      <td>0.375000</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+
+```python
+ss = data3.where( data3.Category == 'ART_AND_DESIGN')
+ss.Sentiment.value_counts()['Positive']
+```
+
+
+
+
+    259
+
+
+
+# Analysis
+
+### Which apps got highest installs ?
+
+
+```python
+data.sort_values(by='Installs', ascending=False).head(5)
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
     }
-   ],
-   "source": [
-    "ss = data3.where( data3.Category == 'ART_AND_DESIGN')\n",
-    "ss.Sentiment.value_counts()['Positive']"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "# Analysis"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "### Which apps got highest installs ?"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 53,
-   "metadata": {},
-   "outputs": [
-    {
-     "data": {
-      "text/html": [
-       "<div>\n",
-       "<style scoped>\n",
-       "    .dataframe tbody tr th:only-of-type {\n",
-       "        vertical-align: middle;\n",
-       "    }\n",
-       "\n",
-       "    .dataframe tbody tr th {\n",
-       "        vertical-align: top;\n",
-       "    }\n",
-       "\n",
-       "    .dataframe thead th {\n",
-       "        text-align: right;\n",
-       "    }\n",
-       "</style>\n",
-       "<table border=\"1\" class=\"dataframe\">\n",
-       "  <thead>\n",
-       "    <tr style=\"text-align: right;\">\n",
-       "      <th></th>\n",
-       "      <th>App</th>\n",
-       "      <th>Category</th>\n",
-       "      <th>Rating</th>\n",
-       "      <th>Reviews</th>\n",
-       "      <th>Installs</th>\n",
-       "      <th>Price</th>\n",
-       "      <th>Content Rating</th>\n",
-       "      <th>Genres</th>\n",
-       "    </tr>\n",
-       "  </thead>\n",
-       "  <tbody>\n",
-       "    <tr>\n",
-       "      <th>2545</th>\n",
-       "      <td>Instagram</td>\n",
-       "      <td>SOCIAL</td>\n",
-       "      <td>4.5</td>\n",
-       "      <td>66577313</td>\n",
-       "      <td>1000000000</td>\n",
-       "      <td>0</td>\n",
-       "      <td>Teen</td>\n",
-       "      <td>Social</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>338</th>\n",
-       "      <td>Google Chrome: Fast &amp; Secure</td>\n",
-       "      <td>COMMUNICATION</td>\n",
-       "      <td>4.3</td>\n",
-       "      <td>9642995</td>\n",
-       "      <td>1000000000</td>\n",
-       "      <td>0</td>\n",
-       "      <td>Everyone</td>\n",
-       "      <td>Communication</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>3523</th>\n",
-       "      <td>Google Drive</td>\n",
-       "      <td>PRODUCTIVITY</td>\n",
-       "      <td>4.4</td>\n",
-       "      <td>2731211</td>\n",
-       "      <td>1000000000</td>\n",
-       "      <td>0</td>\n",
-       "      <td>Everyone</td>\n",
-       "      <td>Productivity</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>2604</th>\n",
-       "      <td>Instagram</td>\n",
-       "      <td>SOCIAL</td>\n",
-       "      <td>4.5</td>\n",
-       "      <td>66577446</td>\n",
-       "      <td>1000000000</td>\n",
-       "      <td>0</td>\n",
-       "      <td>Teen</td>\n",
-       "      <td>Social</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>391</th>\n",
-       "      <td>Skype - free IM &amp; video calls</td>\n",
-       "      <td>COMMUNICATION</td>\n",
-       "      <td>4.1</td>\n",
-       "      <td>10484169</td>\n",
-       "      <td>1000000000</td>\n",
-       "      <td>0</td>\n",
-       "      <td>Everyone</td>\n",
-       "      <td>Communication</td>\n",
-       "    </tr>\n",
-       "  </tbody>\n",
-       "</table>\n",
-       "</div>"
-      ],
-      "text/plain": [
-       "                                App       Category  Rating   Reviews  \\\n",
-       "2545                      Instagram         SOCIAL     4.5  66577313   \n",
-       "338    Google Chrome: Fast & Secure  COMMUNICATION     4.3   9642995   \n",
-       "3523                   Google Drive   PRODUCTIVITY     4.4   2731211   \n",
-       "2604                      Instagram         SOCIAL     4.5  66577446   \n",
-       "391   Skype - free IM & video calls  COMMUNICATION     4.1  10484169   \n",
-       "\n",
-       "        Installs Price Content Rating         Genres  \n",
-       "2545  1000000000     0           Teen         Social  \n",
-       "338   1000000000     0       Everyone  Communication  \n",
-       "3523  1000000000     0       Everyone   Productivity  \n",
-       "2604  1000000000     0           Teen         Social  \n",
-       "391   1000000000     0       Everyone  Communication  "
-      ]
-     },
-     "execution_count": 53,
-     "metadata": {},
-     "output_type": "execute_result"
+
+    .dataframe tbody tr th {
+        vertical-align: top;
     }
-   ],
-   "source": [
-    "data.sort_values(by='Installs', ascending=False).head(5)"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "### How many apps fall under different content ratings"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 65,
-   "metadata": {},
-   "outputs": [
-    {
-     "data": {
-      "text/plain": [
-       "Content Rating\n",
-       "Adults only 18+       3\n",
-       "Everyone           7181\n",
-       "Everyone 10+        395\n",
-       "Mature 17+          450\n",
-       "Teen               1062\n",
-       "Unrated               1\n",
-       "dtype: int64"
-      ]
-     },
-     "execution_count": 65,
-     "metadata": {},
-     "output_type": "execute_result"
+
+    .dataframe thead th {
+        text-align: right;
     }
-   ],
-   "source": [
-    "data.groupby(['Content Rating']).size()"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "## Graph Analysis"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "### Sentiments vs Catagory\n",
-    "\n",
-    "wecould be able to see the relative sentiment of users on a given category of apps by using this."
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 19,
-   "metadata": {
-    "scrolled": true
-   },
-   "outputs": [
-    {
-     "data": {
-      "text/html": [
-       "<div>\n",
-       "<style scoped>\n",
-       "    .dataframe tbody tr th:only-of-type {\n",
-       "        vertical-align: middle;\n",
-       "    }\n",
-       "\n",
-       "    .dataframe tbody tr th {\n",
-       "        vertical-align: top;\n",
-       "    }\n",
-       "\n",
-       "    .dataframe thead th {\n",
-       "        text-align: right;\n",
-       "    }\n",
-       "</style>\n",
-       "<table border=\"1\" class=\"dataframe\">\n",
-       "  <thead>\n",
-       "    <tr style=\"text-align: right;\">\n",
-       "      <th></th>\n",
-       "      <th>Category</th>\n",
-       "      <th>Sentiment</th>\n",
-       "      <th>Count</th>\n",
-       "    </tr>\n",
-       "  </thead>\n",
-       "  <tbody>\n",
-       "    <tr>\n",
-       "      <th>54</th>\n",
-       "      <td>GAME</td>\n",
-       "      <td>Neutral</td>\n",
-       "      <td>814</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>53</th>\n",
-       "      <td>LIFESTYLE</td>\n",
-       "      <td>Negative</td>\n",
-       "      <td>261</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>11</th>\n",
-       "      <td>BEAUTY</td>\n",
-       "      <td>Negative</td>\n",
-       "      <td>65</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>64</th>\n",
-       "      <td>SOCIAL</td>\n",
-       "      <td>Positive</td>\n",
-       "      <td>730</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>14</th>\n",
-       "      <td>BOOKS_AND_REFERENCE</td>\n",
-       "      <td>Negative</td>\n",
-       "      <td>134</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>50</th>\n",
-       "      <td>LIBRARIES_AND_DEMO</td>\n",
-       "      <td>Negative</td>\n",
-       "      <td>51</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>91</th>\n",
-       "      <td>VIDEO_PLAYERS</td>\n",
-       "      <td>Positive</td>\n",
-       "      <td>190</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>37</th>\n",
-       "      <td>FINANCE</td>\n",
-       "      <td>Positive</td>\n",
-       "      <td>1312</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>96</th>\n",
-       "      <td>MAPS_AND_NAVIGATION</td>\n",
-       "      <td>Neutral</td>\n",
-       "      <td>36</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>25</th>\n",
-       "      <td>DATING</td>\n",
-       "      <td>Positive</td>\n",
-       "      <td>1971</td>\n",
-       "    </tr>\n",
-       "  </tbody>\n",
-       "</table>\n",
-       "</div>"
-      ],
-      "text/plain": [
-       "               Category Sentiment Count\n",
-       "54                 GAME   Neutral   814\n",
-       "53            LIFESTYLE  Negative   261\n",
-       "11               BEAUTY  Negative    65\n",
-       "64               SOCIAL  Positive   730\n",
-       "14  BOOKS_AND_REFERENCE  Negative   134\n",
-       "50   LIBRARIES_AND_DEMO  Negative    51\n",
-       "91        VIDEO_PLAYERS  Positive   190\n",
-       "37              FINANCE  Positive  1312\n",
-       "96  MAPS_AND_NAVIGATION   Neutral    36\n",
-       "25               DATING  Positive  1971"
-      ]
-     },
-     "execution_count": 19,
-     "metadata": {},
-     "output_type": "execute_result"
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>App</th>
+      <th>Category</th>
+      <th>Rating</th>
+      <th>Reviews</th>
+      <th>Installs</th>
+      <th>Price</th>
+      <th>Content Rating</th>
+      <th>Genres</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2545</th>
+      <td>Instagram</td>
+      <td>SOCIAL</td>
+      <td>4.5</td>
+      <td>66577313</td>
+      <td>1000000000</td>
+      <td>0</td>
+      <td>Teen</td>
+      <td>Social</td>
+    </tr>
+    <tr>
+      <th>338</th>
+      <td>Google Chrome: Fast &amp; Secure</td>
+      <td>COMMUNICATION</td>
+      <td>4.3</td>
+      <td>9642995</td>
+      <td>1000000000</td>
+      <td>0</td>
+      <td>Everyone</td>
+      <td>Communication</td>
+    </tr>
+    <tr>
+      <th>3523</th>
+      <td>Google Drive</td>
+      <td>PRODUCTIVITY</td>
+      <td>4.4</td>
+      <td>2731211</td>
+      <td>1000000000</td>
+      <td>0</td>
+      <td>Everyone</td>
+      <td>Productivity</td>
+    </tr>
+    <tr>
+      <th>2604</th>
+      <td>Instagram</td>
+      <td>SOCIAL</td>
+      <td>4.5</td>
+      <td>66577446</td>
+      <td>1000000000</td>
+      <td>0</td>
+      <td>Teen</td>
+      <td>Social</td>
+    </tr>
+    <tr>
+      <th>391</th>
+      <td>Skype - free IM &amp; video calls</td>
+      <td>COMMUNICATION</td>
+      <td>4.1</td>
+      <td>10484169</td>
+      <td>1000000000</td>
+      <td>0</td>
+      <td>Everyone</td>
+      <td>Communication</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+### How many apps fall under different content ratings
+
+
+```python
+data.groupby(['Content Rating']).size()
+```
+
+
+
+
+    Content Rating
+    Adults only 18+       3
+    Everyone           7181
+    Everyone 10+        395
+    Mature 17+          450
+    Teen               1062
+    Unrated               1
+    dtype: int64
+
+
+
+## Graph Analysis
+
+### Sentiments vs Catagory
+
+wecould be able to see the relative sentiment of users on a given category of apps by using this.
+
+
+```python
+## Data modification for sentiment vs Category
+
+finalFrame = pd.DataFrame(columns=['Category', 'Sentiment', 'Count'])
+for eachCategory in data3['Category'].unique():
+    tempRow = dict()
+    tempRow['Category'] = eachCategory
+    
+    for sent in ['Neutral', 'Positive', 'Negative']:
+        dfOfCategory = data3.where( data3.Category == eachCategory)
+        tempRow['Sentiment'] = sent
+        tempRow['Count'] = dfOfCategory.Sentiment.value_counts()[sent]
+        finalFrame = finalFrame.append(tempRow, ignore_index = True)
+
+finalFrame.sample(10)   
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
     }
-   ],
-   "source": [
-    "## Data modification for sentiment vs Category\n",
-    "\n",
-    "finalFrame = pd.DataFrame(columns=['Category', 'Sentiment', 'Count'])\n",
-    "for eachCategory in data3['Category'].unique():\n",
-    "    tempRow = dict()\n",
-    "    tempRow['Category'] = eachCategory\n",
-    "    \n",
-    "    for sent in ['Neutral', 'Positive', 'Negative']:\n",
-    "        dfOfCategory = data3.where( data3.Category == eachCategory)\n",
-    "        tempRow['Sentiment'] = sent\n",
-    "        tempRow['Count'] = dfOfCategory.Sentiment.value_counts()[sent]\n",
-    "        finalFrame = finalFrame.append(tempRow, ignore_index = True)\n",
-    "\n",
-    "finalFrame.sample(10)   "
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 20,
-   "metadata": {},
-   "outputs": [
-    {
-     "data": {
-      "text/plain": [
-       "<matplotlib.axes._subplots.AxesSubplot at 0x1a179f63c8>"
-      ]
-     },
-     "execution_count": 20,
-     "metadata": {},
-     "output_type": "execute_result"
-    },
-     "metadata": {
-      "needs_background": "light"
-     },
-     "output_type": "display_data"
+
+    .dataframe tbody tr th {
+        vertical-align: top;
     }
-   ],
-   "source": [
-    "plt.figure(figsize=(15,9))\n",
-    "j = sns.scatterplot(data3['Sentiment_Polarity'],data3['Sentiment_Subjectivity'],hue=data3['Sentiment'], edgecolor='red',palette=\"Paired\")\n",
-    "plt.xlabel('Sentiment Polarity of Reviewers', fontsize=20)\n",
-    "plt.ylabel('Sentiment Subjectivity of Reviewers', fontsize=20)\n",
-    "plt.title(\"Sentiment Analysis of Reviewers\", fontsize=20)\n",
-    "plt.show()\n"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": []
-  }
- ],
- "metadata": {
-  "kernelspec": {
-   "display_name": "Python 3",
-   "language": "python",
-   "name": "python3"
-  },
-  "language_info": {
-   "codemirror_mode": {
-    "name": "ipython",
-    "version": 3
-   },
-   "file_extension": ".py",
-   "mimetype": "text/x-python",
-   "name": "python",
-   "nbconvert_exporter": "python",
-   "pygments_lexer": "ipython3",
-   "version": "3.7.3"
-  }
- },
- "nbformat": 4,
- "nbformat_minor": 2
-}
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Category</th>
+      <th>Sentiment</th>
+      <th>Count</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>48</th>
+      <td>LIBRARIES_AND_DEMO</td>
+      <td>Neutral</td>
+      <td>44</td>
+    </tr>
+    <tr>
+      <th>26</th>
+      <td>DATING</td>
+      <td>Negative</td>
+      <td>697</td>
+    </tr>
+    <tr>
+      <th>65</th>
+      <td>SOCIAL</td>
+      <td>Negative</td>
+      <td>400</td>
+    </tr>
+    <tr>
+      <th>34</th>
+      <td>EVENTS</td>
+      <td>Positive</td>
+      <td>125</td>
+    </tr>
+    <tr>
+      <th>47</th>
+      <td>HOUSE_AND_HOME</td>
+      <td>Negative</td>
+      <td>114</td>
+    </tr>
+    <tr>
+      <th>62</th>
+      <td>MEDICAL</td>
+      <td>Negative</td>
+      <td>358</td>
+    </tr>
+    <tr>
+      <th>92</th>
+      <td>VIDEO_PLAYERS</td>
+      <td>Negative</td>
+      <td>83</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>COMMUNICATION</td>
+      <td>Neutral</td>
+      <td>285</td>
+    </tr>
+    <tr>
+      <th>42</th>
+      <td>HEALTH_AND_FITNESS</td>
+      <td>Neutral</td>
+      <td>487</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>BUSINESS</td>
+      <td>Negative</td>
+      <td>342</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+
+```python
+import matplotlib.pyplot as plt
+
+plt.figure(figsize=(20,9))
+finalFrame.Count = finalFrame.Count.astype(float)
+g = sns.barplot(x=finalFrame.Category, y=finalFrame.Count, hue=finalFrame.Sentiment)
+g.set_xticklabels(g.get_xticklabels(), rotation=90)
+g
+```
+
+
+
+
+    <matplotlib.axes._subplots.AxesSubplot at 0x1a1cc14e80>
+
+
+
+
+![png](output_28_1.png)
+
+
+
+```python
+## Category: Game is dominating the graph lets try by removing that out
+
+finalFrameWithoutGame = finalFrame.drop([54,55,56])
+plt.figure(figsize=(15,9))
+g = sns.barplot(x=finalFrameWithoutGame.Category, y=finalFrameWithoutGame.Count, hue=finalFrameWithoutGame.Sentiment)
+g.set_xticklabels(g.get_xticklabels(), rotation=90)
+g
+```
+
+
+
+
+    <matplotlib.axes._subplots.AxesSubplot at 0x1a1a848128>
+
+
+
+
+![png](output_29_1.png)
+
+
+### Ratings Vs Installs
+
+
+```python
+graphFrame = pd.DataFrame(columns=['Range', 'AverageInstalls'])
+
+for i in range(0, 5):
+    addRow = dict()
+    addRow['Range'] = str(i) + ' - ' + str(i+1)
+    tempData = data3[data3.Rating > i]
+    tempData = tempData[tempData.Rating < (i+1)]
+    avg = tempData.Installs.mean()
+    addRow['AverageInstalls'] = avg
+    graphFrame = graphFrame.append(addRow, ignore_index =True)
+
+graphFrame
+
+sns.barplot(x=graphFrame.Range, y=graphFrame.AverageInstalls)
+```
+
+
+
+
+    <matplotlib.axes._subplots.AxesSubplot at 0x1a1a8f68d0>
+
+
+
+
+![png](output_31_1.png)
+
+
+### Rating vs category
+
+
+```python
+plt.figure(figsize=(15,9))
+g = sns.boxplot(x=data3.Category, y=data3.Rating)
+g.set_xticklabels(g.get_xticklabels(), rotation=90)
+g
+```
+
+
+
+
+    <matplotlib.axes._subplots.AxesSubplot at 0x1a1a8f6cc0>
+
+
+
+
+![png](output_33_1.png)
+
+
+### How many apps in each Category ??
+
+
+```python
+plt.figure(figsize=(15,9))
+g = sns.countplot(x='Category', data=data3, palette='Paired')
+g.set_xticklabels(g.get_xticklabels(), rotation=90)
+g
+```
+
+
+
+
+    <matplotlib.axes._subplots.AxesSubplot at 0x1a1e4af630>
+
+
+
+
+![png](output_35_1.png)
+
+
+
+```python
+corr = data3.corr()
+# plot the heatmap
+sns.heatmap(corr, 
+        xticklabels=corr.columns,
+        yticklabels=corr.columns)
+```
+
+
+
+
+    <matplotlib.axes._subplots.AxesSubplot at 0x1a1e2639e8>
+
+
+
+
+![png](output_36_1.png)
+
+
+
+```python
+data3.dtypes
+
+```
+
+
+
+
+    App                        object
+    Category                   object
+    Rating                    float64
+    Reviews                    object
+    Installs                    int64
+    Price                      object
+    Content Rating             object
+    Genres                     object
+    Translated_Review          object
+    Sentiment                  object
+    Sentiment_Polarity        float64
+    Sentiment_Subjectivity    float64
+    dtype: object
+
+
+
+
+```python
+plt.figure(figsize=(15,9))
+j = sns.scatterplot(data3['Sentiment_Polarity'],data3['Sentiment_Subjectivity'],hue=data3['Sentiment'], edgecolor='red',palette="Paired")
+plt.xlabel('Sentiment Polarity of Reviewers', fontsize=20)
+plt.ylabel('Sentiment Subjectivity of Reviewers', fontsize=20)
+plt.title("Sentiment Analysis of Reviewers", fontsize=20)
+plt.show()
+
+
+```
+
+
+![png](output_38_0.png)
+
+
+
+```python
+
+```
