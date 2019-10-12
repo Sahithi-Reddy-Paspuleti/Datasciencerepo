@@ -1033,19 +1033,7 @@ data.sample(5)
 
 
 <div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -1358,19 +1346,7 @@ data2.sample(10)
 
 
 <div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -1497,19 +1473,7 @@ data2.sample(10)
 
 
 <div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -1618,19 +1582,7 @@ data3.sample(10)
 
 
 <div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -1832,19 +1784,7 @@ data.sort_values(by='Installs', ascending=False).head(5)
 
 
 <div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -1970,19 +1910,7 @@ finalFrame.sample(10)
 
 
 <div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -2078,7 +2006,7 @@ g
 
 
 
-![png](output_28_1.png)
+![png](reports/output_28_1.png)
 
 
 
@@ -2100,7 +2028,7 @@ g
 
 
 
-![png](output_29_1.png)
+![png](reports/output_29_1.png)
 
 
 ### Ratings Vs Installs
@@ -2131,7 +2059,7 @@ sns.barplot(x=graphFrame.Range, y=graphFrame.AverageInstalls)
 
 
 
-![png](output_31_1.png)
+![png](reports/output_31_1.png)
 
 
 ### Rating vs category
@@ -2152,7 +2080,7 @@ g
 
 
 
-![png](output_33_1.png)
+![png](reports/output_33_1.png)
 
 
 ### How many apps in each Category ??
@@ -2173,7 +2101,7 @@ g
 
 
 
-![png](output_35_1.png)
+![png](reports/output_35_1.png)
 
 
 
@@ -2193,7 +2121,7 @@ sns.heatmap(corr,
 
 
 
-![png](output_36_1.png)
+![png](reports/output_36_1.png)
 
 
 
@@ -2234,7 +2162,7 @@ plt.show()
 ```
 
 
-![png](output_38_0.png)
+![png](reports/output_38_0.png)
 
 
 
