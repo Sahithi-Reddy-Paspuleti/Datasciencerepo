@@ -9,7 +9,7 @@ import seaborn as sns
 
 
 ```python
-data = pd.read_csv('googleplaystore.csv')
+data = pd.read_csv('/Users/sahithireddypaspuleti/Datasciencerepository/data/external/googleplaystore.csv')
 data
 ```
 
@@ -1338,7 +1338,7 @@ data.info()
 
 
 ```python
-data2 = pd.read_csv('googleplaystore_user_reviews.csv')
+data2 = pd.read_csv('/Users/sahithireddypaspuleti/Datasciencerepository/data/external/googleplaystore_user_reviews.csv')
 data2.sample(10)
 ```
 
